@@ -16,10 +16,10 @@ A full-stack recipe search engine built on the MERN stack. Users enter ingredien
 
 | Name | Student No. | Contribution |
 |---|---|---|
-| mohammadHossein Amouei | 3145625 | JWT auth, session/cookie config, server-side validation, autocomplete with Levenshtein algorithm, full frontend |
-| Dylan Donnell | 3138330 | Recipe search ranking algorithm, ingredient match scoring, full recipe CRUD |
-| Flora Katz-Andrade | 3145667 | Saved recipes, SavedRecipe model, userController, database seed |
-| Anna Shumilova | 3145667 | Reviews system, Review model, reviewController, average rating calculation |
+| mohammadHossein Amouei | 3145667 | JWT auth, session/cookie config, server-side validation, autocomplete with Levenshtein algorithm, full frontend |
+| Dylan Donnell | 3145625 | Recipe search ranking algorithm, ingredient match scoring, full recipe CRUD |
+| Flora Katz-Andrade | 3138330 | Saved recipes, SavedRecipe model, userController, database seed |
+| Anna Shumilova | 3140507 | Reviews system, Review model, reviewController, average rating calculation |
 
 ---
 
