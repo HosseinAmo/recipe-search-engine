@@ -1,16 +1,15 @@
-/**
- * @file users.js
- * @description User saved-recipe routes.
- * @author Flora
- */
+const router = require("express").Router();
+const { requireAuth } = require("../middleware/auth");
+const {
+  getSaved,
+  saveRecipe,
+  unsaveRecipe,
+} = require("../controllers/userController");
 
-const express = require('express');
-const router = express.Router();
-const { getSavedRecipes, saveRecipe, unsaveRecipe } = require('../controllers/userController');
-const { protect } = require('../middleware/authMiddleware');
+router.use(requireAuth); // All user routes require login
 
-router.get('/saved', protect, getSavedRecipes);
-router.post('/saved', protect, saveRecipe);
-router.delete('/saved/:recipeId', protect, unsaveRecipe);
+router.get("/saved", getSaved);
+router.post("/saved", saveRecipe);
+router.delete("/saved/:recipeId", unsaveRecipe);
 
 module.exports = router;

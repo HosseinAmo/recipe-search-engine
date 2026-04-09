@@ -1,17 +1,8 @@
-/**
- * @file reviews.js
- * @description Review routes.
- * @author Anna
- */
+const router = require('express').Router();
+const { requireAuth } = require('../middleware/auth');
+const { getReviews, createReview } = require('../controllers/reviewController');
 
-const express = require('express');
-const router = express.Router();
-const { getReviewsByRecipe, createReview, deleteReview } = require('../controllers/reviewController');
-const { protect } = require('../middleware/authMiddleware');
-const { validateReview } = require('../middleware/validateMiddleware');
-
-router.get('/:recipeId', getReviewsByRecipe);
-router.post('/', protect, validateReview, createReview);
-router.delete('/:id', protect, deleteReview);
+router.get('/:recipeId', getReviews);
+router.post('/', requireAuth, createReview);
 
 module.exports = router;

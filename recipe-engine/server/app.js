@@ -31,11 +31,21 @@ app.use(express.urlencoded({ extended: true }));
 // Parse cookies (required for httpOnly JWT cookie access)
 app.use(cookieParser());
 
-// CORS - allow requests from the React dev server
+// CORS - allow file://, Live Server, Vite, CRA etc.
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',
+  'http://localhost:3000',
+  'http://localhost:5173',
+].filter(Boolean);
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'http://localhost:3000',
-    credentials: true, // Allow cookies to be sent cross-origin
+    origin: (origin, cb) => {
+      if (!origin || allowedOrigins.includes(origin)) return cb(null, true);
+      cb(new Error('CORS blocked: ' + origin));
+    },
+    credentials: true,
   })
 );
 

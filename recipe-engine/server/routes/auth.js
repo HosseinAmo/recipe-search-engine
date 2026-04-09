@@ -1,41 +1,50 @@
-/**
- * @file auth.js
- * @description Authentication routes: register, login, logout, profile
- * @author Hossein
- */
+const router = require("express").Router();
+const { body, validationResult } = require("express-validator");
+const {
+  register,
+  login,
+  logout,
+  profile,
+} = require("../controllers/authController");
 
-const express = require('express');
-const router = express.Router();
-const { registerUser, loginUser, logoutUser, getProfile } = require('../controllers/authController');
-const { validateRegister, validateLogin } = require('../middleware/validateMiddleware');
-const { protect } = require('../middleware/authMiddleware');
+const validate = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty())
+    return res.status(422).json({ success: false, errors: errors.array() });
+  next();
+};
 
-/**
- * @route   POST /api/auth/register
- * @desc    Register a new user
- * @access  Public
- */
-router.post('/register', validateRegister, registerUser);
+router.post(
+  "/register",
+  [
+    body("name")
+      .trim()
+      .isLength({ min: 2 })
+      .withMessage("Name must be at least 2 characters."),
+    body("email")
+      .isEmail()
+      .normalizeEmail()
+      .withMessage("Valid email required."),
+    body("password")
+      .isLength({ min: 8 })
+      .withMessage("Min 8 characters.")
+      .matches(/[A-Z]/)
+      .withMessage("Must contain an uppercase letter.")
+      .matches(/[0-9]/)
+      .withMessage("Must contain a number."),
+  ],
+  validate,
+  register,
+);
 
-/**
- * @route   POST /api/auth/login
- * @desc    Login user and set httpOnly JWT cookie
- * @access  Public
- */
-router.post('/login', validateLogin, loginUser);
+router.post(
+  "/login",
+  [body("email").isEmail().normalizeEmail(), body("password").notEmpty()],
+  validate,
+  login,
+);
 
-/**
- * @route   POST /api/auth/logout
- * @desc    Logout user and clear JWT cookie
- * @access  Private
- */
-router.post('/logout', protect, logoutUser);
-
-/**
- * @route   GET /api/auth/profile
- * @desc    Get logged-in user's profile
- * @access  Private
- */
-router.get('/profile', protect, getProfile);
+router.post("/logout", logout);
+router.get("/profile", profile);
 
 module.exports = router;

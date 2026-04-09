@@ -1,39 +1,38 @@
-/**
- * @file User.js
- * @description Mongoose schema and model for application users.
- *              Password field is excluded from queries by default.
- * @author Hossein
- */
-
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: [true, 'Name is required.'],
-      trim: true,
-      minlength: [2, 'Name must be at least 2 characters.'],
-      maxlength: [50, 'Name cannot exceed 50 characters.'],
-    },
+    name: { type: String, required: true, trim: true },
     email: {
       type: String,
-      required: [true, 'Email is required.'],
+      required: true,
       unique: true,
       lowercase: true,
       trim: true,
-      match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email address.'],
     },
-    password: {
-      type: String,
-      required: [true, 'Password is required.'],
-      minlength: [8, 'Password must be at least 8 characters.'],
-      select: false, // Exclude from query results by default
-    },
+    passwordHash: { type: String, required: true },
+    savedRecipes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Recipe" }],
   },
-  {
-    timestamps: true, // Adds createdAt and updatedAt fields automatically
-  }
+  { timestamps: true },
 );
 
-module.exports = mongoose.model('User', userSchema);
+// Hash password before saving
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("passwordHash")) return next();
+  this.passwordHash = await bcrypt.hash(this.passwordHash, 12);
+  next();
+});
+
+userSchema.methods.comparePassword = function (plain) {
+  return bcrypt.compare(plain, this.passwordHash);
+};
+
+// Never send passwordHash to client
+userSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.passwordHash;
+  return obj;
+};
+
+module.exports = mongoose.model("User", userSchema);

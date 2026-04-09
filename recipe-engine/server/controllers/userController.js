@@ -1,97 +1,49 @@
-/**
- * @file userController.js
- * @description Handles saved recipe operations for logged-in users.
- *              Users can save, unsave, and view their bookmarked recipes.
- * @author Flora
- */
+const User = require("../models/User");
+const Recipe = require("../models/Recipe");
 
-const SavedRecipe = require('../models/SavedRecipe');
-const Recipe = require('../models/Recipe');
-
-/**
- * @desc    Get all recipes saved by the logged-in user
- * @route   GET /api/users/saved
- * @access  Private
- */
-const getSavedRecipes = async (req, res) => {
+// GET /api/users/saved
+async function getSaved(req, res) {
   try {
-    // Find all saved entries for this user, populate full recipe data
-    const saved = await SavedRecipe.find({ userId: req.user._id })
-      .populate('recipeId')
-      .sort({ createdAt: -1 })
-      .lean();
-
-    // Extract the populated recipe documents
-    const recipes = saved
-      .map((s) => s.recipeId)
-      .filter(Boolean); // Remove any with deleted recipes
-
-    return res.status(200).json({ success: true, recipes });
-  } catch (error) {
-    console.error('Get saved recipes error:', error);
-    return res.status(500).json({ success: false, message: 'Server error.' });
+    const user = await User.findById(req.user._id).populate("savedRecipes");
+    if (!user)
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found." });
+    return res.json({ success: true, recipes: user.savedRecipes });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
   }
-};
+}
 
-/**
- * @desc    Save a recipe to the user's collection
- * @route   POST /api/users/saved
- * @access  Private
- */
-const saveRecipe = async (req, res) => {
-  const { recipeId } = req.body;
-
-  if (!recipeId) {
-    return res.status(400).json({ success: false, message: 'Recipe ID is required.' });
-  }
-
+// POST /api/users/saved  { recipeId }
+async function saveRecipe(req, res) {
   try {
-    // Verify the recipe exists
+    const { recipeId } = req.body;
     const recipe = await Recipe.findById(recipeId);
-    if (!recipe) {
-      return res.status(404).json({ success: false, message: 'Recipe not found.' });
-    }
+    if (!recipe)
+      return res
+        .status(404)
+        .json({ success: false, message: "Recipe not found." });
 
-    // Save it — unique index prevents duplicates
-    await SavedRecipe.create({ userId: req.user._id, recipeId });
-
-    return res.status(201).json({ success: true, message: 'Recipe saved.' });
-  } catch (error) {
-    if (error.code === 11000) {
-      return res.status(400).json({
-        success: false,
-        message: 'You have already saved this recipe.',
-      });
-    }
-    console.error('Save recipe error:', error);
-    return res.status(500).json({ success: false, message: 'Server error.' });
-  }
-};
-
-/**
- * @desc    Remove a recipe from the user's saved collection
- * @route   DELETE /api/users/saved/:recipeId
- * @access  Private
- */
-const unsaveRecipe = async (req, res) => {
-  try {
-    const result = await SavedRecipe.findOneAndDelete({
-      userId: req.user._id,
-      recipeId: req.params.recipeId,
+    await User.findByIdAndUpdate(req.user._id, {
+      $addToSet: { savedRecipes: recipeId },
     });
-
-    if (!result) {
-      return res.status(404).json({
-        success: false,
-        message: 'Saved recipe not found.',
-      });
-    }
-
-    return res.status(200).json({ success: true, message: 'Recipe removed from saved.' });
-  } catch (error) {
-    console.error('Unsave recipe error:', error);
-    return res.status(500).json({ success: false, message: 'Server error.' });
+    return res.json({ success: true, message: "Recipe saved." });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
   }
-};
+}
 
-module.exports = { getSavedRecipes, saveRecipe, unsaveRecipe };
+// DELETE /api/users/saved/:recipeId
+async function unsaveRecipe(req, res) {
+  try {
+    await User.findByIdAndUpdate(req.user._id, {
+      $pull: { savedRecipes: req.params.recipeId },
+    });
+    return res.json({ success: true, message: "Recipe removed from saved." });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+}
+
+module.exports = { getSaved, saveRecipe, unsaveRecipe };
