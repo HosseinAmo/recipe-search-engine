@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════
 // CONFIG — change API_BASE if your server runs elsewhere
 // ═══════════════════════════════════════════════════════
-const API_BASE = 'http://localhost:5001/api';
+const API_BASE = 'https://recipe-search-engine.onrender.com/api';
 
 // ─── STATE ────────────────────────────────────────────
 const state = {
