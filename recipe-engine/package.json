@@ -1,0 +1,20 @@
+{
+  "name": "recipe-search-engine",
+  "version": "1.0.0",
+  "description": "Recipe Search Engine – Web Technologies Assignment 2, Griffith College Cork",
+  "private": true,
+  "scripts": {
+    "start": "cd server && node index.js",
+    "dev":   "cd server && nodemon index.js",
+    "seed":  "node data/seed.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "authors": [
+    "Dylan",
+    "Hossein",
+    "Flora",
+    "Anna"
+  ]
+}

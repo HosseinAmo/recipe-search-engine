@@ -1,148 +1,100 @@
 /**
  * @file autocompleteController.js
- * @description Ingredient autocomplete endpoint with fuzzy/Levenshtein matching.
- *
- * *** EXTRA CREDIT ***
- * This feature goes beyond the assignment brief by implementing fuzzy search
- * using the Levenshtein edit distance algorithm. This allows the API to return
- * suggestions even when the user makes typos (e.g. "tomat" → "tomato",
- * "chiken" → "chicken"). Clearly marked as extra credit per assignment instructions.
- *
+ * @description Controller for ingredient autocomplete with fuzzy/Levenshtein matching.
  * @author Hossein
  */
 
 const Recipe = require('../models/Recipe');
 
-// ============================================================
-// EXTRA CREDIT: Levenshtein Distance Algorithm
-// Computes the minimum number of single-character edits
-// (insertions, deletions, substitutions) needed to transform
-// string a into string b. Used for typo-tolerant autocomplete.
-// ============================================================
-
 /**
- * Calculates the Levenshtein edit distance between two strings.
+ * Computes the Levenshtein edit distance between two strings.
+ * Used for typo-tolerant fuzzy matching (e.g. "chiken" → "chicken").
  * @param {string} a - Source string
  * @param {string} b - Target string
- * @returns {number} The edit distance (0 = identical)
+ * @returns {number} Edit distance (lower = more similar)
  */
-const levenshtein = (a, b) => {
+function levenshtein(a, b) {
   const m = a.length;
   const n = b.length;
-
-  // Build a 2D DP matrix
+  // Build a (m+1) x (n+1) matrix of edit distances
   const dp = Array.from({ length: m + 1 }, (_, i) =>
     Array.from({ length: n + 1 }, (_, j) => (i === 0 ? j : j === 0 ? i : 0))
   );
-
   for (let i = 1; i <= m; i++) {
     for (let j = 1; j <= n; j++) {
       if (a[i - 1] === b[j - 1]) {
-        dp[i][j] = dp[i - 1][j - 1]; // Characters match - no cost
+        dp[i][j] = dp[i - 1][j - 1];
       } else {
-        dp[i][j] =
-          1 +
-          Math.min(
-            dp[i - 1][j],     // Deletion
-            dp[i][j - 1],     // Insertion
-            dp[i - 1][j - 1]  // Substitution
-          );
+        dp[i][j] = 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
       }
     }
   }
-
   return dp[m][n];
-};
+}
 
 /**
- * Scores a candidate ingredient against the user's query.
- * Returns a score from 0–1 (higher = better match).
- * Priority: exact prefix match > fuzzy Levenshtein match.
+ * GET /api/autocomplete?q=<query>
+ * Returns up to 8 ingredient suggestions matching the query.
+ * Matches by substring first; falls back to Levenshtein for short queries.
  *
- * @param {string} query - The user's typed input (lowercased)
- * @param {string} candidate - An ingredient name from the DB (lowercased)
- * @returns {number} Score between 0 and 1
+ * @param {import('express').Request}  req
+ * @param {import('express').Response} res
  */
-const scoreMatch = (query, candidate) => {
-  // Exact or prefix match scores highest
-  if (candidate.startsWith(query)) return 1;
-
-  // Levenshtein on the first N chars of candidate (same length as query)
-  // This makes short queries match the start of longer words fairly
-  const slice = candidate.slice(0, query.length + 2);
-  const distance = levenshtein(query, slice);
-
-  // Normalise: max allowed distance scales with query length (1 per 4 chars)
-  const maxDistance = Math.max(1, Math.floor(query.length / 4));
-
-  if (distance <= maxDistance) {
-    // Score inversely proportional to distance
-    return 1 - distance / (maxDistance + 1);
-  }
-
-  return 0; // Not a useful match
-};
-
-/**
- * @desc    Return autocomplete suggestions for a partial ingredient query.
- *          Uses fuzzy Levenshtein matching to tolerate typos.
- * @route   GET /api/autocomplete?q=<query>
- * @access  Public
- *
- * EXTRA CREDIT: fuzzy matching via Levenshtein distance
- */
-const getAutocompleteSuggestions = async (req, res) => {
-  const { q } = req.query;
-
-  // Require at least 2 characters to avoid returning everything
-  if (!q || q.trim().length < 2) {
-    return res.status(400).json({
-      success: false,
-      message: 'Query must be at least 2 characters.',
-    });
-  }
-
-  const query = q.trim().toLowerCase();
-
+async function getAutocomplete(req, res) {
   try {
-    // Pull all distinct ingredient names from the recipes collection.
-    // Using MongoDB's $unwind + $group to get a flat unique list.
-    const results = await Recipe.aggregate([
-      { $unwind: '$ingredients' },
-      {
-        $group: {
-          _id: null,
-          names: { $addToSet: { $toLower: '$ingredients.name' } },
-        },
-      },
-      { $project: { _id: 0, names: 1 } },
-    ]);
-
-    if (!results.length) {
-      return res.status(200).json({ success: true, suggestions: [] });
+    const q = (req.query.q || '').trim().toLowerCase();
+    if (q.length < 2) {
+      return res.json({ success: true, suggestions: [] });
     }
 
-    const allIngredients = results[0].names;
+    // Fetch all recipes containing ingredients whose name matches the query (case-insensitive)
+    const recipes = await Recipe.find(
+      { 'ingredients.name': { $regex: q, $options: 'i' } },
+      { 'ingredients.name': 1 }
+    ).lean();
 
-    // Score each ingredient and filter out non-matches
-    const scored = allIngredients
-      .map((name) => ({ name, score: scoreMatch(query, name) }))
-      .filter((item) => item.score > 0)
-      .sort((a, b) => b.score - a.score) // Best matches first
-      .slice(0, 10)                        // Return top 10 suggestions
-      .map((item) => item.name);
+    // Collect unique ingredient names that contain the substring
+    const exactMatches = new Set();
+    const allIngredients = new Set();
 
-    return res.status(200).json({
-      success: true,
-      suggestions: scored,
-    });
-  } catch (error) {
-    console.error('Autocomplete error:', error);
-    return res.status(500).json({
-      success: false,
-      message: 'Server error. Please try again.',
-    });
+    for (const recipe of recipes) {
+      for (const ing of recipe.ingredients) {
+        const name = ing.name.toLowerCase();
+        allIngredients.add(name);
+        if (name.includes(q)) {
+          exactMatches.add(name);
+        }
+      }
+    }
+
+    // Fuzzy fallback: find ingredients within edit distance 2 of the query
+    // (catches typos like "chiken" → "chicken", "tomatoe" → "tomato")
+    const fuzzyMatches = new Set();
+    const maxDist = q.length <= 4 ? 1 : 2; // stricter tolerance for short queries
+    for (const name of allIngredients) {
+      if (exactMatches.has(name)) continue;
+      // Only check words within the ingredient name, not the full string
+      const words = name.split(/\s+/);
+      for (const word of words) {
+        if (Math.abs(word.length - q.length) <= maxDist) {
+          if (levenshtein(q, word) <= maxDist) {
+            fuzzyMatches.add(name);
+            break;
+          }
+        }
+      }
+    }
+
+    // Combine: exact substring matches first, then fuzzy matches
+    const suggestions = [
+      ...[...exactMatches].sort(),
+      ...[...fuzzyMatches].sort(),
+    ].slice(0, 8);
+
+    return res.json({ success: true, suggestions });
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
   }
-};
+}
 
-module.exports = { getAutocompleteSuggestions };
+module.exports = { getAutocomplete };
