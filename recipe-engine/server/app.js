@@ -70,6 +70,10 @@ app.use(
     },
   })
 );
+// Serve frontend static files
+
+const path = require('path');
+app.use(express.static(path.join(__dirname, '..')));
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
 
