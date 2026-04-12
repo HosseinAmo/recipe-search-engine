@@ -8,7 +8,7 @@ A full-stack recipe search engine built on the MERN stack. Users enter ingredien
 
 ## Live URL
 
-*Paste your Render/Railway URL here before submission.*
+(https://recipe-search-engine.onrender.com)
 
 ---
 
