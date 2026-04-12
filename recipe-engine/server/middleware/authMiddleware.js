@@ -5,8 +5,8 @@
  * @author Hossein
  */
 
-const jwt = require('jsonwebtoken');
-const User = require('../models/User');
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
 
 /**
  * Middleware: protect
@@ -23,7 +23,7 @@ const protect = async (req, res, next) => {
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: 'Not authorised. Please log in.',
+      message: "Not authorised. Please log in.",
     });
   }
 
@@ -32,12 +32,12 @@ const protect = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Attach the user document to the request (excluding password)
-    const user = await User.findById(decoded.id).select('-password');
+    const user = await User.findById(decoded.id).select("-password");
 
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'User belonging to this token no longer exists.',
+        message: "User belonging to this token no longer exists.",
       });
     }
 
@@ -45,27 +45,33 @@ const protect = async (req, res, next) => {
 
     // Refresh the cookie expiry on activity (sliding session)
     const freshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '7d',
+      expiresIn: process.env.JWT_EXPIRES_IN || "7d",
     });
 
-    res.cookie('jwt', freshToken, {
+    const is_production = process.env.NODE_ENV === "production";
+    if (!is_production)
+      console.log(
+        `WARNING: Running in non-production mode, security is disabled.`,
+      );
+
+    res.cookie("jwt", freshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: is_production,
+      sameSite: "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     next();
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
+    if (error.name === "TokenExpiredError") {
       return res.status(401).json({
         success: false,
-        message: 'Session expired. Please log in again.',
+        message: "Session expired. Please log in again.",
       });
     }
     return res.status(401).json({
       success: false,
-      message: 'Invalid token. Please log in again.',
+      message: "Invalid token. Please log in again.",
     });
   }
 };
@@ -86,7 +92,7 @@ const optionalAuth = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select('-password');
+    const user = await User.findById(decoded.id).select("-password");
     if (user) req.user = user;
   } catch {
     // Invalid token — just continue without user

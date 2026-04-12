@@ -5,8 +5,8 @@
  * @author Hossein
  */
 
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 /**
  * PrivateRoute component.
@@ -17,7 +17,7 @@ const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   // Wait for session restore before deciding to redirect
-  if (loading) return <p style={{ padding: '2rem' }}>Loading...</p>;
+  if (loading) return <p style={{ padding: "2rem" }}>Loading...</p>;
 
   return user ? children : <Navigate to="/login" replace />;
 };

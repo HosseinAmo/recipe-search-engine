@@ -5,9 +5,9 @@
  * @author Hossein
  */
 
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import './Navbar.css';
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import "./Navbar.css";
 
 /**
  * Navbar component.
@@ -22,24 +22,36 @@ const Navbar = () => {
    */
   const handleLogout = async () => {
     await logout();
-    navigate('/');
+    navigate("/");
   };
 
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar-brand">🍳 RecipeSearch</Link>
+      <Link to="/" className="navbar-brand">
+        🍳 RecipeSearch
+      </Link>
       <div className="navbar-links">
         {user ? (
           <>
             <span className="navbar-greeting">Hi, {user.name}</span>
-            <Link to="/saved" className="navbar-link">Saved</Link>
-            <Link to="/profile" className="navbar-link">Profile</Link>
-            <button className="navbar-logout" onClick={handleLogout}>Logout</button>
+            <Link to="/saved" className="navbar-link">
+              Saved
+            </Link>
+            <Link to="/profile" className="navbar-link">
+              Profile
+            </Link>
+            <button className="navbar-logout" onClick={handleLogout}>
+              Logout
+            </button>
           </>
         ) : (
           <>
-            <Link to="/login" className="navbar-link">Login</Link>
-            <Link to="/register" className="navbar-link navbar-link--cta">Register</Link>
+            <Link to="/login" className="navbar-link">
+              Login
+            </Link>
+            <Link to="/register" className="navbar-link navbar-link--cta">
+              Register
+            </Link>
           </>
         )}
       </div>

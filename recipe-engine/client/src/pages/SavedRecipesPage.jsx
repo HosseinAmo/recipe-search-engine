@@ -6,7 +6,7 @@
 
 const SavedRecipesPage = () => {
   return (
-    <div style={{ padding: '2rem' }}>
+    <div style={{ padding: "2rem" }}>
       <h1>Saved Recipes</h1>
       {/* Flora: fetch and render user's saved recipes here */}
     </div>

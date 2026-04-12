@@ -5,8 +5,8 @@
  * @author Hossein
  */
 
-import { createContext, useContext, useState, useEffect } from 'react';
-import api from '../utils/api';
+import { createContext, useContext, useState, useEffect } from "react";
+import api from "../utils/api";
 
 const AuthContext = createContext(null);
 
@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const restoreSession = async () => {
       try {
-        const res = await api.get('/auth/profile');
+        const res = await api.get("/auth/profile");
         if (res.data.success) {
           setUser(res.data.user);
         }
@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
    * @returns {object} API response data
    */
   const login = async (email, password) => {
-    const res = await api.post('/auth/login', { email, password });
+    const res = await api.post("/auth/login", { email, password });
     if (res.data.success) {
       setUser(res.data.user);
     }
@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
    * @returns {object} API response data
    */
   const register = async (name, email, password) => {
-    const res = await api.post('/auth/register', { name, email, password });
+    const res = await api.post("/auth/register", { name, email, password });
     if (res.data.success) {
       setUser(res.data.user);
     }
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
    * Log the current user out and clear state.
    */
   const logout = async () => {
-    await api.post('/auth/logout');
+    await api.post("/auth/logout");
     setUser(null);
   };
 
@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }) => {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

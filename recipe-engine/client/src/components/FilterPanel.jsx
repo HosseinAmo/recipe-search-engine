@@ -5,11 +5,15 @@
  * @author Hossein
  */
 
-import { useState } from 'react';
-import './FilterPanel.css';
+import { useState } from "react";
+import "./FilterPanel.css";
 
 const DIETARY_OPTIONS = [
-  'vegetarian', 'vegan', 'gluten-free', 'dairy-free', 'nut-free',
+  "vegetarian",
+  "vegan",
+  "gluten-free",
+  "dairy-free",
+  "nut-free",
 ];
 
 /**
@@ -25,8 +29,8 @@ const DIETARY_OPTIONS = [
  */
 const FilterPanel = ({
   initialDietary = [],
-  initialCookTimeMax = '',
-  initialCaloriesMax = '',
+  initialCookTimeMax = "",
+  initialCaloriesMax = "",
   onFilterChange,
 }) => {
   const [dietary, setDietary] = useState(initialDietary);
@@ -39,7 +43,9 @@ const FilterPanel = ({
    */
   const toggleDietary = (option) => {
     setDietary((prev) =>
-      prev.includes(option) ? prev.filter((d) => d !== option) : [...prev, option]
+      prev.includes(option)
+        ? prev.filter((d) => d !== option)
+        : [...prev, option],
     );
   };
 
@@ -48,7 +54,7 @@ const FilterPanel = ({
    */
   const applyFilters = () => {
     onFilterChange({
-      dietary: dietary.join(','),
+      dietary: dietary.join(","),
       cookTimeMax,
       caloriesMax,
     });
@@ -59,9 +65,9 @@ const FilterPanel = ({
    */
   const resetFilters = () => {
     setDietary([]);
-    setCookTimeMax('');
-    setCaloriesMax('');
-    onFilterChange({ dietary: '', cookTimeMax: '', caloriesMax: '' });
+    setCookTimeMax("");
+    setCaloriesMax("");
+    onFilterChange({ dietary: "", cookTimeMax: "", caloriesMax: "" });
   };
 
   return (

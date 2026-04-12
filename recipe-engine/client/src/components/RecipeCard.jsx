@@ -5,9 +5,9 @@
  * @author Hossein
  */
 
-import { Link } from 'react-router-dom';
-import StarRating from './StarRating';
-import './RecipeCard.css';
+import { Link } from "react-router-dom";
+import StarRating from "./StarRating";
+import "./RecipeCard.css";
 
 /**
  * RecipeCard component.
@@ -18,7 +18,11 @@ const RecipeCard = ({ recipe }) => {
   return (
     <Link to={`/recipes/${recipe._id}`} className="recipe-card">
       {recipe.image && (
-        <img src={recipe.image} alt={recipe.title} className="recipe-card-image" />
+        <img
+          src={recipe.image}
+          alt={recipe.title}
+          className="recipe-card-image"
+        />
       )}
       <div className="recipe-card-body">
         <h3 className="recipe-card-title">{recipe.title}</h3>
@@ -26,11 +30,16 @@ const RecipeCard = ({ recipe }) => {
           <span>⏱ {recipe.cookTime} min</span>
           <span>🍽 {recipe.servings} servings</span>
         </div>
-        <StarRating rating={recipe.averageRating} reviewCount={recipe.reviewCount} />
+        <StarRating
+          rating={recipe.averageRating}
+          reviewCount={recipe.reviewCount}
+        />
         {recipe.dietaryTags && recipe.dietaryTags.length > 0 && (
           <div className="recipe-card-tags">
             {recipe.dietaryTags.map((tag) => (
-              <span key={tag} className="recipe-card-tag">{tag}</span>
+              <span key={tag} className="recipe-card-tag">
+                {tag}
+              </span>
             ))}
           </div>
         )}

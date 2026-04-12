@@ -5,10 +5,10 @@
  * @author Hossein
  */
 
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import './AuthPage.css';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import "./AuthPage.css";
 
 /**
  * RegisterPage component.
@@ -16,9 +16,13 @@ import './AuthPage.css';
 const RegisterPage = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
   const [errors, setErrors] = useState({});
-  const [serverError, setServerError] = useState('');
+  const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
   /**
@@ -27,7 +31,7 @@ const RegisterPage = () => {
    */
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    setErrors((prev) => ({ ...prev, [e.target.name]: '' }));
+    setErrors((prev) => ({ ...prev, [e.target.name]: "" }));
   };
 
   /**
@@ -36,16 +40,22 @@ const RegisterPage = () => {
    */
   const validate = () => {
     const newErrors = {};
-    if (!formData.name.trim()) newErrors.name = 'Name is required.';
-    else if (formData.name.trim().length < 2) newErrors.name = 'Name must be at least 2 characters.';
+    if (!formData.name.trim()) newErrors.name = "Name is required.";
+    else if (formData.name.trim().length < 2)
+      newErrors.name = "Name must be at least 2 characters.";
 
-    if (!formData.email.trim()) newErrors.email = 'Email is required.';
-    else if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = 'Enter a valid email address.';
+    if (!formData.email.trim()) newErrors.email = "Email is required.";
+    else if (!/^\S+@\S+\.\S+$/.test(formData.email))
+      newErrors.email = "Enter a valid email address.";
 
-    if (!formData.password) newErrors.password = 'Password is required.';
-    else if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters.';
-    else if (!/[A-Z]/.test(formData.password)) newErrors.password = 'Password must contain at least one uppercase letter.';
-    else if (!/[0-9]/.test(formData.password)) newErrors.password = 'Password must contain at least one number.';
+    if (!formData.password) newErrors.password = "Password is required.";
+    else if (formData.password.length < 8)
+      newErrors.password = "Password must be at least 8 characters.";
+    else if (!/[A-Z]/.test(formData.password))
+      newErrors.password =
+        "Password must contain at least one uppercase letter.";
+    else if (!/[0-9]/.test(formData.password))
+      newErrors.password = "Password must contain at least one number.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -55,25 +65,33 @@ const RegisterPage = () => {
    * Submits registration data to the API.
    */
   const handleSubmit = async () => {
-    setServerError('');
+    setServerError("");
     if (!validate()) return;
     setLoading(true);
     try {
-      const result = await register(formData.name, formData.email, formData.password);
+      const result = await register(
+        formData.name,
+        formData.email,
+        formData.password,
+      );
       if (result.success) {
-        navigate('/');
+        navigate("/");
       } else {
         // Handle array of validation errors from express-validator
         if (result.errors) {
           const mapped = {};
-          result.errors.forEach((err) => { mapped[err.path] = err.msg; });
+          result.errors.forEach((err) => {
+            mapped[err.path] = err.msg;
+          });
           setErrors(mapped);
         } else {
-          setServerError(result.message || 'Registration failed.');
+          setServerError(result.message || "Registration failed.");
         }
       }
     } catch (err) {
-      setServerError(err.response?.data?.message || 'Registration failed. Please try again.');
+      setServerError(
+        err.response?.data?.message || "Registration failed. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -93,7 +111,7 @@ const RegisterPage = () => {
             value={formData.name}
             onChange={handleChange}
             placeholder="Your name"
-            className={errors.name ? 'input-error' : ''}
+            className={errors.name ? "input-error" : ""}
           />
           {errors.name && <p className="field-error">{errors.name}</p>}
         </div>
@@ -107,7 +125,7 @@ const RegisterPage = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="you@example.com"
-            className={errors.email ? 'input-error' : ''}
+            className={errors.email ? "input-error" : ""}
           />
           {errors.email && <p className="field-error">{errors.email}</p>}
         </div>
@@ -121,15 +139,19 @@ const RegisterPage = () => {
             value={formData.password}
             onChange={handleChange}
             placeholder="Min. 8 chars, 1 uppercase, 1 number"
-            className={errors.password ? 'input-error' : ''}
+            className={errors.password ? "input-error" : ""}
           />
           {errors.password && <p className="field-error">{errors.password}</p>}
         </div>
 
         {serverError && <p className="auth-server-error">{serverError}</p>}
 
-        <button className="auth-submit" onClick={handleSubmit} disabled={loading}>
-          {loading ? 'Creating account...' : 'Register'}
+        <button
+          className="auth-submit"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? "Creating account..." : "Register"}
         </button>
 
         <p className="auth-switch">

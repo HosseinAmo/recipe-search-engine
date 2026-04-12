@@ -6,12 +6,12 @@
  * @author Hossein
  */
 
-import { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
-import api from '../utils/api';
-import RecipeCard from '../components/RecipeCard';
-import FilterPanel from '../components/FilterPanel';
-import './SearchResultsPage.css';
+import { useState, useEffect } from "react";
+import { useSearchParams, Link } from "react-router-dom";
+import api from "../utils/api";
+import RecipeCard from "../components/RecipeCard";
+import FilterPanel from "../components/FilterPanel";
+import "./SearchResultsPage.css";
 
 /**
  * SearchResultsPage component.
@@ -22,13 +22,13 @@ const SearchResultsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   // Parse query params from URL
-  const ingredientList = searchParams.get('ingredients') || '';
-  const dietaryParam = searchParams.get('dietary') || '';
-  const cookTimeMax = searchParams.get('cookTimeMax') || '';
-  const caloriesMax = searchParams.get('caloriesMax') || '';
+  const ingredientList = searchParams.get("ingredients") || "";
+  const dietaryParam = searchParams.get("dietary") || "";
+  const cookTimeMax = searchParams.get("cookTimeMax") || "";
+  const caloriesMax = searchParams.get("caloriesMax") || "";
 
   /**
    * Fetches recipes from the API whenever URL params change.
@@ -36,9 +36,9 @@ const SearchResultsPage = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       setLoading(true);
-      setError('');
+      setError("");
       try {
-        const res = await api.get('/recipes/search', {
+        const res = await api.get("/recipes/search", {
           params: {
             ingredients: ingredientList,
             dietary: dietaryParam,
@@ -49,11 +49,11 @@ const SearchResultsPage = () => {
         if (res.data.success) {
           setRecipes(res.data.recipes);
         } else {
-          setError('No recipes found. Try different ingredients.');
+          setError("No recipes found. Try different ingredients.");
         }
       } catch (err) {
-        console.error('Search error:', err);
-        setError('Something went wrong. Please try again.');
+        console.error("Search error:", err);
+        setError("Something went wrong. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -73,13 +73,13 @@ const SearchResultsPage = () => {
     setSearchParams({ ...current, ...updatedFilters });
   };
 
-  const ingredientTags = ingredientList.split(',').filter(Boolean);
+  const ingredientTags = ingredientList.split(",").filter(Boolean);
 
   return (
     <div className="results-page">
       <aside className="results-sidebar">
         <FilterPanel
-          initialDietary={dietaryParam.split(',').filter(Boolean)}
+          initialDietary={dietaryParam.split(",").filter(Boolean)}
           initialCookTimeMax={cookTimeMax}
           initialCaloriesMax={caloriesMax}
           onFilterChange={handleFilterChange}
@@ -89,14 +89,14 @@ const SearchResultsPage = () => {
       <section className="results-main">
         <div className="results-header">
           <h2 className="results-title">
-            Recipes using:{' '}
+            Recipes using:{" "}
             <span className="results-ingredients">
-              {ingredientTags.join(', ')}
+              {ingredientTags.join(", ")}
             </span>
           </h2>
           {!loading && (
             <p className="results-count">
-              {recipes.length} recipe{recipes.length !== 1 ? 's' : ''} found
+              {recipes.length} recipe{recipes.length !== 1 ? "s" : ""} found
             </p>
           )}
         </div>
@@ -108,7 +108,9 @@ const SearchResultsPage = () => {
         {!loading && !error && recipes.length === 0 && (
           <div className="results-empty">
             <p>No recipes found for those ingredients.</p>
-            <Link to="/" className="results-back-link">Try a new search</Link>
+            <Link to="/" className="results-back-link">
+              Try a new search
+            </Link>
           </div>
         )}
 

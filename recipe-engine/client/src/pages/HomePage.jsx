@@ -5,10 +5,10 @@
  * @author Hossein
  */
 
-import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import api from '../utils/api';
-import './HomePage.css';
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../utils/api";
+import "./HomePage.css";
 
 /**
  * HomePage component.
@@ -18,7 +18,7 @@ import './HomePage.css';
  * - Search button that navigates to /search with query params
  */
 const HomePage = () => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -27,7 +27,11 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const DIETARY_OPTIONS = [
-    'vegetarian', 'vegan', 'gluten-free', 'dairy-free', 'nut-free',
+    "vegetarian",
+    "vegan",
+    "gluten-free",
+    "dairy-free",
+    "nut-free",
   ];
 
   /**
@@ -45,13 +49,15 @@ const HomePage = () => {
     }
     debounceRef.current = setTimeout(async () => {
       try {
-        const res = await api.get(`/autocomplete?q=${encodeURIComponent(query)}`);
+        const res = await api.get(
+          `/autocomplete?q=${encodeURIComponent(query)}`,
+        );
         if (res.data.success) {
           setSuggestions(res.data.suggestions);
           setShowSuggestions(true);
         }
       } catch (err) {
-        console.error('Autocomplete fetch error:', err);
+        console.error("Autocomplete fetch error:", err);
       }
     }, 300);
   };
@@ -78,7 +84,7 @@ const HomePage = () => {
     if (trimmed && !ingredients.includes(trimmed)) {
       setIngredients((prev) => [...prev, trimmed]);
     }
-    setInputValue('');
+    setInputValue("");
     setSuggestions([]);
     setShowSuggestions(false);
   };
@@ -96,7 +102,7 @@ const HomePage = () => {
    * @param {React.KeyboardEvent} e
    */
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && inputValue.trim()) {
+    if (e.key === "Enter" && inputValue.trim()) {
       addIngredient(inputValue);
     }
   };
@@ -107,7 +113,9 @@ const HomePage = () => {
    */
   const toggleFilter = (filter) => {
     setDietaryFilters((prev) =>
-      prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]
+      prev.includes(filter)
+        ? prev.filter((f) => f !== filter)
+        : [...prev, filter],
     );
   };
 
@@ -118,9 +126,9 @@ const HomePage = () => {
     if (ingredients.length === 0) return;
 
     const params = new URLSearchParams();
-    params.set('ingredients', ingredients.join(','));
+    params.set("ingredients", ingredients.join(","));
     if (dietaryFilters.length > 0) {
-      params.set('dietary', dietaryFilters.join(','));
+      params.set("dietary", dietaryFilters.join(","));
     }
 
     navigate(`/search?${params.toString()}`);
@@ -131,7 +139,8 @@ const HomePage = () => {
       <header className="home-hero">
         <h1 className="home-title">What's in your fridge?</h1>
         <p className="home-subtitle">
-          Enter the ingredients you have and we'll find the best recipes for you.
+          Enter the ingredients you have and we'll find the best recipes for
+          you.
         </p>
       </header>
 
@@ -155,7 +164,9 @@ const HomePage = () => {
               type="text"
               className="ingredient-input"
               placeholder={
-                ingredients.length === 0 ? 'e.g. chicken, garlic, lemon...' : 'Add more...'
+                ingredients.length === 0
+                  ? "e.g. chicken, garlic, lemon..."
+                  : "Add more..."
               }
               value={inputValue}
               onChange={handleInputChange}

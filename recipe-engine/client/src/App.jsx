@@ -7,23 +7,23 @@
  * @author Hossein
  */
 
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import Navbar from './components/Navbar';
-import PrivateRoute from './components/PrivateRoute';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./context/AuthContext";
+import Navbar from "./components/Navbar";
+import PrivateRoute from "./components/PrivateRoute";
 
 // Pages - Hossein leads
-import HomePage from './pages/HomePage';
-import SearchResultsPage from './pages/SearchResultsPage';
-import RecipeDetailPage from './pages/RecipeDetailPage';
+import HomePage from "./pages/HomePage";
+import SearchResultsPage from "./pages/SearchResultsPage";
+import RecipeDetailPage from "./pages/RecipeDetailPage";
 
 // Auth pages
-import LoginPage from './pages/LoginPage';
-import RegisterPage from './pages/RegisterPage';
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 // Flora leads
-import ProfilePage from './pages/ProfilePage';
-import SavedRecipesPage from './pages/SavedRecipesPage';
+import ProfilePage from "./pages/ProfilePage";
+import SavedRecipesPage from "./pages/SavedRecipesPage";
 
 function App() {
   return (

@@ -6,13 +6,13 @@
  *         Anna (reviews section - see ReviewsSection component)
  */
 
-import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import api from '../utils/api';
-import { useAuth } from '../context/AuthContext';
-import StarRating from '../components/StarRating';
-import ReviewsSection from '../components/ReviewsSection';
-import './RecipeDetailPage.css';
+import { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import api from "../utils/api";
+import { useAuth } from "../context/AuthContext";
+import StarRating from "../components/StarRating";
+import ReviewsSection from "../components/ReviewsSection";
+import "./RecipeDetailPage.css";
 
 /**
  * RecipeDetailPage component.
@@ -25,7 +25,7 @@ const RecipeDetailPage = () => {
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saveLoading, setSaveLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   // Fetch recipe data on mount
   useEffect(() => {
@@ -37,11 +37,11 @@ const RecipeDetailPage = () => {
           setRecipe(res.data.recipe);
           setSaved(res.data.isSaved || false);
         } else {
-          setError('Recipe not found.');
+          setError("Recipe not found.");
         }
       } catch (err) {
-        console.error('Recipe fetch error:', err);
-        setError('Failed to load recipe. Please try again.');
+        console.error("Recipe fetch error:", err);
+        setError("Failed to load recipe. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -61,11 +61,11 @@ const RecipeDetailPage = () => {
         await api.delete(`/users/saved/${id}`);
         setSaved(false);
       } else {
-        await api.post('/users/saved', { recipeId: id });
+        await api.post("/users/saved", { recipeId: id });
         setSaved(true);
       }
     } catch (err) {
-      console.error('Save toggle error:', err);
+      console.error("Save toggle error:", err);
     } finally {
       setSaveLoading(false);
     }
@@ -78,13 +78,19 @@ const RecipeDetailPage = () => {
   return (
     <div className="detail-page">
       {/* Back link */}
-      <Link to="/" className="detail-back">← Back to search</Link>
+      <Link to="/" className="detail-back">
+        ← Back to search
+      </Link>
 
       <article className="detail-article">
         {/* Header */}
         <header className="detail-header">
           {recipe.image && (
-            <img src={recipe.image} alt={recipe.title} className="detail-image" />
+            <img
+              src={recipe.image}
+              alt={recipe.title}
+              className="detail-image"
+            />
           )}
           <div className="detail-meta">
             <h1 className="detail-title">{recipe.title}</h1>
@@ -93,13 +99,18 @@ const RecipeDetailPage = () => {
               <span>🍽 {recipe.servings} servings</span>
               {recipe.calories && <span>🔥 {recipe.calories} kcal</span>}
             </div>
-            <StarRating rating={recipe.averageRating} reviewCount={recipe.reviewCount} />
+            <StarRating
+              rating={recipe.averageRating}
+              reviewCount={recipe.reviewCount}
+            />
 
             {/* Dietary tags */}
             {recipe.dietaryTags && recipe.dietaryTags.length > 0 && (
               <div className="detail-tags">
                 {recipe.dietaryTags.map((tag) => (
-                  <span key={tag} className="detail-tag">{tag}</span>
+                  <span key={tag} className="detail-tag">
+                    {tag}
+                  </span>
                 ))}
               </div>
             )}
@@ -107,12 +118,12 @@ const RecipeDetailPage = () => {
             {/* Save / Unsave button (only for logged-in users) */}
             {user && (
               <button
-                className={`save-button ${saved ? 'saved' : ''}`}
+                className={`save-button ${saved ? "saved" : ""}`}
                 onClick={handleSaveToggle}
                 disabled={saveLoading}
-                aria-label={saved ? 'Remove from saved recipes' : 'Save recipe'}
+                aria-label={saved ? "Remove from saved recipes" : "Save recipe"}
               >
-                {saved ? '♥ Saved' : '♡ Save Recipe'}
+                {saved ? "♥ Saved" : "♡ Save Recipe"}
               </button>
             )}
           </div>

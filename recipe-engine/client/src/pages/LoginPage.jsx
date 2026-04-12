@@ -5,10 +5,10 @@
  * @author Hossein
  */
 
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import './AuthPage.css';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import "./AuthPage.css";
 
 /**
  * LoginPage component.
@@ -17,9 +17,9 @@ import './AuthPage.css';
 const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
-  const [serverError, setServerError] = useState('');
+  const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
   /**
@@ -28,7 +28,7 @@ const LoginPage = () => {
    */
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    setErrors((prev) => ({ ...prev, [e.target.name]: '' }));
+    setErrors((prev) => ({ ...prev, [e.target.name]: "" }));
   };
 
   /**
@@ -37,9 +37,10 @@ const LoginPage = () => {
    */
   const validate = () => {
     const newErrors = {};
-    if (!formData.email.trim()) newErrors.email = 'Email is required.';
-    else if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = 'Enter a valid email.';
-    if (!formData.password) newErrors.password = 'Password is required.';
+    if (!formData.email.trim()) newErrors.email = "Email is required.";
+    else if (!/^\S+@\S+\.\S+$/.test(formData.email))
+      newErrors.email = "Enter a valid email.";
+    if (!formData.password) newErrors.password = "Password is required.";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -48,18 +49,20 @@ const LoginPage = () => {
    * Submits login credentials to the API.
    */
   const handleSubmit = async () => {
-    setServerError('');
+    setServerError("");
     if (!validate()) return;
     setLoading(true);
     try {
       const result = await login(formData.email, formData.password);
       if (result.success) {
-        navigate('/');
+        navigate("/");
       } else {
-        setServerError(result.message || 'Login failed.');
+        setServerError(result.message || "Login failed.");
       }
     } catch (err) {
-      setServerError(err.response?.data?.message || 'Login failed. Please try again.');
+      setServerError(
+        err.response?.data?.message || "Login failed. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -79,7 +82,7 @@ const LoginPage = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="you@example.com"
-            className={errors.email ? 'input-error' : ''}
+            className={errors.email ? "input-error" : ""}
           />
           {errors.email && <p className="field-error">{errors.email}</p>}
         </div>
@@ -93,15 +96,19 @@ const LoginPage = () => {
             value={formData.password}
             onChange={handleChange}
             placeholder="Your password"
-            className={errors.password ? 'input-error' : ''}
+            className={errors.password ? "input-error" : ""}
           />
           {errors.password && <p className="field-error">{errors.password}</p>}
         </div>
 
         {serverError && <p className="auth-server-error">{serverError}</p>}
 
-        <button className="auth-submit" onClick={handleSubmit} disabled={loading}>
-          {loading ? 'Logging in...' : 'Log In'}
+        <button
+          className="auth-submit"
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {loading ? "Logging in..." : "Log In"}
         </button>
 
         <p className="auth-switch">

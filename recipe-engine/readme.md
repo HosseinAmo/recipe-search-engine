@@ -127,41 +127,80 @@ Open `index.html` directly in your browser — no build step required.
 ## Folder Structure
 
 ```
-/
-├── index.html              # Self-contained frontend (open directly in browser)
-├── styles.css              # Frontend styles
-├── app.js                  # Frontend JavaScript
-├── package.json            # Root package.json (convenience scripts)
-├── readme.md
-├── .gitignore
-├── data/
-│   └── seed.js             # Run once to seed 50 recipes into MongoDB
-└── server/
-    ├── index.js            # Entry point — connects MongoDB, starts Express
-    ├── app.js              # Express app, middleware, routes
-    ├── .env                # Environment variables (not committed to git)
-    ├── .env.example        # Template for environment variables
-    ├── package.json
-    ├── seed.js             # Alternate seed script location
-    ├── models/
-    │   ├── User.js
-    │   ├── Recipe.js
-    │   └── Review.js
-    ├── routes/
-    │   ├── auth.js
-    │   ├── recipes.js
-    │   ├── reviews.js
-    │   ├── users.js
-    │   └── autocomplete.js
-    ├── controllers/
-    │   ├── authController.js
-    │   ├── recipeController.js
-    │   ├── reviewController.js
-    │   ├── userController.js
-    │   └── autocompleteController.js
-    └── middleware/
-        ├── auth.js
-        └── validateMiddleware.js
+ recipe-engine
+├──  client
+│   ├── 󰣞 src
+│   │   ├──  components
+│   │   │   ├──  FilterPanel.css
+│   │   │   ├──  FilterPanel.jsx
+│   │   │   ├──  Navbar.css
+│   │   │   ├──  Navbar.jsx
+│   │   │   ├──  PrivateRoute.jsx
+│   │   │   ├──  RecipeCard.css
+│   │   │   ├──  RecipeCard.jsx
+│   │   │   ├──  ReviewsSection.css
+│   │   │   ├──  ReviewsSection.jsx
+│   │   │   ├──  StarRating.css
+│   │   │   └──  StarRating.jsx
+│   │   ├──  context
+│   │   │   └──  AuthContext.jsx
+│   │   ├──  pages
+│   │   │   ├──  AuthPage.css
+│   │   │   ├──  HomePage.css
+│   │   │   ├──  HomePage.jsx
+│   │   │   ├──  LoginPage.jsx
+│   │   │   ├──  ProfilePage.jsx
+│   │   │   ├──  RecipeDetailPage.css
+│   │   │   ├──  RecipeDetailPage.jsx
+│   │   │   ├──  RegisterPage.jsx
+│   │   │   ├──  SavedRecipesPage.jsx
+│   │   │   ├──  SearchResultsPage.css
+│   │   │   └──  SearchResultsPage.jsx
+│   │   ├──  utils
+│   │   │   └──  api.js
+│   │   ├──  App.jsx
+│   │   ├──  index.css
+│   │   └──  main.jsx
+│   ├── 󰊢 .gitignore
+│   ├──  index.html
+│   ├──  package-lock.json
+│   ├──  package.json
+│   └──  vite.config.js
+├──  data
+│   └──  seed.js
+├──  server
+│   ├──  controllers
+│   │   ├──  authController.js
+│   │   ├──  autocompleteController.js
+│   │   ├──  recipeController.js
+│   │   ├──  reviewController.js
+│   │   └──  userController.js
+│   ├──  middleware
+│   │   ├──  auth.js
+│   │   ├──  authMiddleware.js
+│   │   └──  validateMiddleware.js
+│   ├──  models
+│   │   ├──  Recipe.js
+│   │   ├──  Review.js
+│   │   ├──  SavedRecipe.js
+│   │   └──  User.js
+│   ├──  routes
+│   │   ├──  auth.js
+│   │   ├──  autocomplete.js
+│   │   ├──  recipes.js
+│   │   ├──  reviews.js
+│   │   └──  users.js
+│   ├── 󰊢 .gitignore
+│   ├──  app.js
+│   ├──  index.js
+│   ├──  package-lock.json
+│   └──  package.json
+├── 󰊢 .gitignore
+├──  app.js
+├──  index.html
+├──  package-lock.json
+├──  readme.md
+└──  styles.css
 ```
 
 ---

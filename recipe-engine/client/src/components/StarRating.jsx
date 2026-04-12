@@ -4,7 +4,7 @@
  * @author Hossein
  */
 
-import './StarRating.css';
+import "./StarRating.css";
 
 /**
  * StarRating component.
@@ -14,17 +14,20 @@ import './StarRating.css';
  */
 const StarRating = ({ rating = 0, reviewCount = 0 }) => {
   const stars = Array.from({ length: 5 }, (_, i) => {
-    if (i < Math.floor(rating)) return 'full';
-    if (i < rating) return 'half';
-    return 'empty';
+    if (i < Math.floor(rating)) return "full";
+    if (i < rating) return "half";
+    return "empty";
   });
 
   return (
-    <div className="star-rating" aria-label={`Rating: ${rating.toFixed(1)} out of 5`}>
+    <div
+      className="star-rating"
+      aria-label={`Rating: ${rating.toFixed(1)} out of 5`}
+    >
       <span className="stars">
         {stars.map((type, i) => (
           <span key={i} className={`star star--${type}`}>
-            {type === 'full' ? '★' : type === 'half' ? '⯨' : '☆'}
+            {type === "full" ? "★" : type === "half" ? "⯨" : "☆"}
           </span>
         ))}
       </span>

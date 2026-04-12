@@ -6,10 +6,10 @@
  * @author Hossein (scaffold), Anna (implementation)
  */
 
-import { useState, useEffect } from 'react';
-import api from '../utils/api';
-import { useAuth } from '../context/AuthContext';
-import './ReviewsSection.css';
+import { useState, useEffect } from "react";
+import api from "../utils/api";
+import { useAuth } from "../context/AuthContext";
+import "./ReviewsSection.css";
 
 /**
  * ReviewsSection component.
@@ -21,8 +21,8 @@ const ReviewsSection = ({ recipeId }) => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rating, setRating] = useState(0);
-  const [comment, setComment] = useState('');
-  const [submitError, setSubmitError] = useState('');
+  const [comment, setComment] = useState("");
+  const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   // Fetch reviews for this recipe on mount
@@ -32,7 +32,7 @@ const ReviewsSection = ({ recipeId }) => {
         const res = await api.get(`/reviews/${recipeId}`);
         if (res.data.success) setReviews(res.data.reviews);
       } catch (err) {
-        console.error('Reviews fetch error:', err);
+        console.error("Reviews fetch error:", err);
       } finally {
         setLoading(false);
       }
@@ -44,25 +44,25 @@ const ReviewsSection = ({ recipeId }) => {
    * Submits a new review for the recipe.
    */
   const handleSubmit = async () => {
-    setSubmitError('');
+    setSubmitError("");
     if (rating === 0) {
-      setSubmitError('Please select a star rating.');
+      setSubmitError("Please select a star rating.");
       return;
     }
     if (comment.trim().length < 10) {
-      setSubmitError('Review must be at least 10 characters.');
+      setSubmitError("Review must be at least 10 characters.");
       return;
     }
     setSubmitting(true);
     try {
-      const res = await api.post('/reviews', { recipeId, rating, comment });
+      const res = await api.post("/reviews", { recipeId, rating, comment });
       if (res.data.success) {
         setReviews((prev) => [res.data.review, ...prev]);
         setRating(0);
-        setComment('');
+        setComment("");
       }
     } catch (err) {
-      setSubmitError(err.response?.data?.message || 'Failed to submit review.');
+      setSubmitError(err.response?.data?.message || "Failed to submit review.");
     } finally {
       setSubmitting(false);
     }
@@ -80,9 +80,9 @@ const ReviewsSection = ({ recipeId }) => {
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
-                className={`star-btn ${star <= rating ? 'active' : ''}`}
+                className={`star-btn ${star <= rating ? "active" : ""}`}
                 onClick={() => setRating(star)}
-                aria-label={`Rate ${star} star${star > 1 ? 's' : ''}`}
+                aria-label={`Rate ${star} star${star > 1 ? "s" : ""}`}
               >
                 ★
               </button>
@@ -102,7 +102,7 @@ const ReviewsSection = ({ recipeId }) => {
             onClick={handleSubmit}
             disabled={submitting}
           >
-            {submitting ? 'Submitting...' : 'Submit Review'}
+            {submitting ? "Submitting..." : "Submit Review"}
           </button>
         </div>
       )}
@@ -116,11 +116,18 @@ const ReviewsSection = ({ recipeId }) => {
         {reviews.map((review) => (
           <li key={review._id} className="review-item">
             <div className="review-header">
-              <span className="review-author">{review.userId?.name || 'Anonymous'}</span>
-              <span className="review-rating">{'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}</span>
+              <span className="review-author">
+                {review.userId?.name || "Anonymous"}
+              </span>
+              <span className="review-rating">
+                {"★".repeat(review.rating)}
+                {"☆".repeat(5 - review.rating)}
+              </span>
             </div>
             <p className="review-comment">{review.comment}</p>
-            <span className="review-date">{new Date(review.createdAt).toLocaleDateString()}</span>
+            <span className="review-date">
+              {new Date(review.createdAt).toLocaleDateString()}
+            </span>
           </li>
         ))}
       </ul>
