@@ -4,7 +4,7 @@
  * @author Dylan
  */
 
-const router = require('express').Router();
+const { protect, requireRole } = require('../middleware/authMiddleware');
 const { body } = require('express-validator');
 const { requireAuth } = require('../middleware/auth');
 const { validate }    = require('../middleware/validateMiddleware');
@@ -53,12 +53,12 @@ router.get('/:id', getRecipe);
 // ─── Protected routes (login required) ───────────────────────────────────────
 
 // POST /api/recipes  — create a new recipe
-router.post('/', requireAuth, recipeValidation, validate, createRecipe);
+router.post('/',    protect, requireRole('admin'), recipeValidation, validate, createRecipe);
 
 // PUT /api/recipes/:id  — update a recipe (creator only)
-router.put('/:id', requireAuth, recipeValidation, validate, updateRecipe);
+router.put('/:id',  protect, requireRole('admin'), recipeValidation, validate, updateRecipe);
 
 // DELETE /api/recipes/:id  — delete a recipe (creator only)
-router.delete('/:id', requireAuth, deleteRecipe);
+router.delete('/:id', protect, requireRole('admin'), deleteRecipe);
 
 module.exports = router;
