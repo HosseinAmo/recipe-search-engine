@@ -1,103 +1,90 @@
 /**
  * @file authMiddleware.js
- * @description JWT verification middleware. Reads the token from the httpOnly
- *              cookie, verifies it, and attaches the decoded user to req.user.
+ * @description Session-based auth middleware with optional JWT cookie fallback.
+ *              Uses express-session as the primary auth mechanism (required by brief).
+ *              Also includes RBAC requireRole middleware.
  * @author Hossein
  */
-
-const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 /**
  * Middleware: protect
- * Verifies the JWT from the httpOnly cookie and attaches the user to req.user.
- * Returns 401 if no token is present or the token is invalid/expired.
+ * Checks req.session.userId to verify the user is logged in.
+ * Attaches the user document to req.user for downstream use.
  *
  * @param {object} req - Express request object
  * @param {object} res - Express response object
  * @param {function} next - Express next middleware function
  */
 const protect = async (req, res, next) => {
-  const token = req.cookies?.jwt;
-
-  if (!token) {
+  // Check session first (primary auth mechanism)
+  if (!req.session || !req.session.userId) {
     return res.status(401).json({
       success: false,
       message: "Not authorised. Please log in.",
     });
   }
-
   try {
-    // Verify the token signature and expiry
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
     // Attach the user document to the request (excluding password)
-    const user = await User.findById(decoded.id).select("-password");
-
+    const user = await User.findById(req.session.userId).select("-password");
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "User belonging to this token no longer exists.",
+        message: "User no longer exists.",
       });
     }
-
     req.user = user;
-
-    // Refresh the cookie expiry on activity (sliding session)
-    const freshToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRES_IN || "7d",
-    });
-
-    const is_production = process.env.NODE_ENV === "production";
-    if (!is_production)
-      console.log(
-        `WARNING: Running in non-production mode, security is disabled.`,
-      );
-
-    res.cookie("jwt", freshToken, {
-      httpOnly: true,
-      secure: is_production,
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
     next();
   } catch (error) {
-    if (error.name === "TokenExpiredError") {
-      return res.status(401).json({
-        success: false,
-        message: "Session expired. Please log in again.",
-      });
-    }
-    return res.status(401).json({
+    return res.status(500).json({
       success: false,
-      message: "Invalid token. Please log in again.",
+      message: "Server error during authentication.",
     });
   }
 };
 
 /**
  * Middleware: optionalAuth
- * Like protect, but does not reject requests without a token.
- * If a valid token is present it attaches req.user; otherwise continues.
- * Used on public routes that behave differently when logged in (e.g. isSaved).
+ * Does not reject unauthenticated requests.
+ * If a valid session exists, attaches req.user; otherwise continues.
+ * Used on public routes that behave differently when logged in.
  *
  * @param {object} req - Express request object
  * @param {object} res - Express response object
  * @param {function} next - Express next middleware function
  */
 const optionalAuth = async (req, res, next) => {
-  const token = req.cookies?.jwt;
-  if (!token) return next();
-
+  if (!req.session || !req.session.userId) return next();
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.id).select("-password");
+    const user = await User.findById(req.session.userId).select("-password");
     if (user) req.user = user;
   } catch {
-    // Invalid token — just continue without user
+    // Invalid session — continue without user
   }
   next();
 };
 
-module.exports = { protect, optionalAuth };
+/**
+ * Middleware: requireRole
+ * RBAC check — must be used AFTER protect middleware.
+ * Rejects the request if the logged-in user's role is not in the allowed list.
+ *
+ * @param {...string} roles - Allowed roles e.g. requireRole("admin")
+ * @returns {function} Express middleware function
+ *
+ * @example
+ * router.delete("/:id", protect, requireRole("admin"), deleteRecipe);
+ */
+const requireRole = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user || !roles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        message: `Access denied. Required role: ${roles.join(" or ")}.`,
+      });
+    }
+    next();
+  };
+};
+
+module.exports = { protect, optionalAuth, requireRole };
