@@ -8,7 +8,7 @@
 ## Live URL
 
 > **https://recipe-engine-gcc26.onrender.com**  
-> *(Replace with your actual Render URL before submission)*
+
 
 ---
 
@@ -27,7 +27,7 @@ A full-stack recipe search engine built on the MERN stack. Users enter ingredien
 ### Server setup
 ```bash
 cd server
-cp .env.example .env        # Fill in your MongoDB URI and secrets
+cp .env.example .env        
 npm install
 node ../data/seed.js        # Seed the database with 50 recipes (run once)
 npm run dev                 # Starts on http://localhost:5001
