@@ -16,6 +16,7 @@ async function register(req, res) {
     req.session.userId    = user._id;
     req.session.userName  = user.name;
     req.session.userEmail = user.email;
+    req.session.role      = user.role;
 
     return res.status(201).json({ success: true, user });
   } catch (err) {
@@ -41,6 +42,7 @@ async function login(req, res) {
     req.session.userId    = user._id;
     req.session.userName  = user.name;
     req.session.userEmail = user.email;
+    req.session.role      = user.role; 
 
     return res.json({ success: true, user });
   } catch (err) {
