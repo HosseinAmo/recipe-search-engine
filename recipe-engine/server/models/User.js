@@ -6,6 +6,12 @@ const userSchema = new mongoose.Schema({
   email:        { type: String, required: true, unique: true, lowercase: true, trim: true },
   passwordHash: { type: String, required: true },
   savedRecipes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Recipe' }],
+  savedRecipes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Recipe' }],
+role: {
+  type: String,
+  enum: ["user", "admin"],
+  default: "user",
+},
 }, { timestamps: true });
 
 // Hash password before saving
