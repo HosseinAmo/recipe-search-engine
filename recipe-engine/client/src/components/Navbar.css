@@ -1,8 +1,23 @@
 /* Navbar.css */
-.navbar { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#fff; border-bottom:1px solid #e5e5e5; position:sticky; top:0; z-index:100; }
-.navbar-brand { font-size:1.25rem; font-weight:700; }
-.navbar-links { display:flex; align-items:center; gap:1rem; }
-.navbar-link { color:#555; font-size:0.95rem; }
-.navbar-link--cta { background:#e63946; color:#fff; padding:0.4rem 0.9rem; border-radius:6px; }
-.navbar-greeting { font-size:0.9rem; color:#777; }
-.navbar-logout { background:none; border:1px solid #ccc; padding:0.4rem 0.9rem; border-radius:6px; font-size:0.9rem; }
+.navbar { display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; height: 58px; background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.navbar-brand { font-size: 1.1rem; font-weight: 800; text-decoration: none; color: #e63946; letter-spacing: -0.02em; }
+.navbar-links { display: flex; align-items: center; gap: 0.8rem; }
+.navbar-greeting { font-size: 0.85rem; color: #666; font-weight: 500; }
+.navbar-link { text-decoration: none; color: #444; font-size: 0.9rem; font-weight: 500; padding: 0.3rem 0.6rem; border-radius: 6px; transition: all 0.15s; }
+.navbar-link:hover { background: #fde8ea; color: #e63946; }
+.navbar-link.active { color: #e63946; font-weight: 700; }
+.navbar-link--cta { background: #e63946; color: #fff !important; padding: 0.4rem 0.9rem; border-radius: 8px; font-weight: 700; }
+.navbar-link--cta:hover { background: #c0392b !important; }
+.navbar-logout { background: none; border: 1px solid #ddd; color: #666; padding: 0.35rem 0.8rem; border-radius: 8px; font-size: 0.85rem; cursor: pointer; font-weight: 500; transition: all 0.15s; }
+.navbar-logout:hover { border-color: #e63946; color: #e63946; }
+
+/* NEW: Hamburger */
+.navbar-hamburger { display: none; background: none; border: none; font-size: 1.3rem; cursor: pointer; color: #444; padding: 0.3rem; }
+
+/* Mobile */
+@media (max-width: 600px) {
+  .navbar-hamburger { display: block; }
+  .navbar-links { display: none; flex-direction: column; position: absolute; top: 58px; left: 0; right: 0; background: #fff; border-bottom: 1px solid #eee; padding: 1rem 1.5rem; gap: 0.6rem; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .navbar-links.open { display: flex; }
+  .navbar-greeting { font-size: 0.9rem; }
+}

@@ -1,10 +1,16 @@
 /* RecipeCard.css */
-.recipe-card { display:block; background:#fff; border-radius:10px; overflow:hidden; border:1px solid #e5e5e5; transition:box-shadow 0.2s; }
-.recipe-card:hover { box-shadow:0 4px 16px rgba(0,0,0,0.1); }
-.recipe-card-image { width:100%; height:180px; object-fit:cover; }
-.recipe-card-body { padding:1rem; }
-.recipe-card-title { font-size:1rem; font-weight:600; margin-bottom:0.5rem; }
-.recipe-card-stats { font-size:0.85rem; color:#777; display:flex; gap:1rem; margin-bottom:0.4rem; }
-.recipe-card-tags { display:flex; flex-wrap:wrap; gap:0.3rem; margin-top:0.5rem; }
-.recipe-card-tag { background:#f0f0f0; border-radius:4px; padding:0.15rem 0.5rem; font-size:0.75rem; }
-.recipe-card-match { font-size:0.8rem; color:#2a9d8f; margin-top:0.4rem; font-weight:600; }
+.recipe-card { display: flex; flex-direction: column; border: 1px solid #eee; border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; transition: transform 0.15s, box-shadow 0.15s; background: #fff; }
+.recipe-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+.recipe-card-image { width: 100%; height: 160px; object-fit: cover; }
+/* NEW: Placeholder */
+.recipe-card-placeholder { width: 100%; height: 160px; background: #fde8ea; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+.recipe-card-body { padding: 0.9rem; flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+.recipe-card-title { font-size: 0.95rem; font-weight: 700; line-height: 1.3; margin: 0; color: #1a1a1a; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.recipe-card-stats { display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.78rem; color: #666; }
+.recipe-card-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.recipe-card-tag { background: #f0f9f0; color: #27ae60; font-size: 0.72rem; padding: 0.15rem 0.5rem; border-radius: 20px; font-weight: 500; }
+/* NEW: Match bar */
+.recipe-card-match { margin-top: 0.3rem; }
+.match-bar { height: 5px; background: #eee; border-radius: 3px; overflow: hidden; margin-bottom: 0.2rem; }
+.match-bar-fill { height: 100%; background: #e63946; border-radius: 3px; transition: width 0.4s; }
+.match-label { font-size: 0.75rem; color: #e63946; font-weight: 600; }

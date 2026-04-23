@@ -1,57 +1,62 @@
 /**
  * @file Navbar.jsx
- * @description Top navigation bar. Shows login/register links when logged out,
- *              and profile/saved/logout links when logged in.
+ * @description Top navigation bar with mobile hamburger menu.
  * @author Hossein
+ * NEW FEATURES ADDED:
+ *  - Mobile hamburger menu toggle
+ *  - Active link highlighting
+ *  - Closes menu on navigation
  */
 
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Navbar.css";
 
-/**
- * Navbar component.
- * Reads auth state from AuthContext and renders appropriate nav links.
- */
 const Navbar = () => {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, logout }    = useAuth();
+  const navigate            = useNavigate();
+  const location            = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  /**
-   * Logs the user out and redirects to the homepage.
-   */
   const handleLogout = async () => {
     await logout();
+    setMenuOpen(false);
     navigate("/");
   };
 
+  const closeMenu = () => setMenuOpen(false);
+
+  const isActive = (path) => location.pathname === path;
+
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar-brand">
+      <Link to="/" className="navbar-brand" onClick={closeMenu}>
         🍳 RecipeSearch
       </Link>
-      <div className="navbar-links">
+
+      {/* NEW: Hamburger button for mobile */}
+      <button
+        className="navbar-hamburger"
+        onClick={() => setMenuOpen((prev) => !prev)}
+        aria-label="Toggle menu"
+        aria-expanded={menuOpen}
+      >
+        {menuOpen ? "✕" : "☰"}
+      </button>
+
+      <div className={`navbar-links ${menuOpen ? "open" : ""}`}>
         {user ? (
           <>
-            <span className="navbar-greeting">Hi, {user.name}</span>
-            <Link to="/saved" className="navbar-link">
-              Saved
-            </Link>
-            <Link to="/profile" className="navbar-link">
-              Profile
-            </Link>
-            <button className="navbar-logout" onClick={handleLogout}>
-              Logout
-            </button>
+            <span className="navbar-greeting">Hi, {user.name.split(" ")[0]}</span>
+            <Link to="/saved"   className={`navbar-link ${isActive("/saved")   ? "active" : ""}`} onClick={closeMenu}>♥ Saved</Link>
+            <Link to="/profile" className={`navbar-link ${isActive("/profile") ? "active" : ""}`} onClick={closeMenu}>Profile</Link>
+            <button className="navbar-logout" onClick={handleLogout}>Logout</button>
           </>
         ) : (
           <>
-            <Link to="/login" className="navbar-link">
-              Login
-            </Link>
-            <Link to="/register" className="navbar-link navbar-link--cta">
-              Register
-            </Link>
+            <Link to="/login"    className={`navbar-link ${isActive("/login")    ? "active" : ""}`} onClick={closeMenu}>Login</Link>
+            <Link to="/register" className="navbar-link navbar-link--cta" onClick={closeMenu}>Register</Link>
           </>
         )}
       </div>

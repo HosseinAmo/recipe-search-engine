@@ -1,0 +1,18 @@
+/* SavedRecipesPage.css */
+.saved-page { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+.saved-header { margin-bottom: 1.5rem; }
+.saved-title { font-size: 1.8rem; font-weight: 800; color: #1a1a1a; margin-bottom: 0.3rem; }
+.saved-count { color: #888; font-size: 0.9rem; }
+.saved-loading { padding: 2rem; color: #888; }
+.saved-error   { padding: 2rem; color: #e63946; }
+.saved-empty   { text-align: center; padding: 3rem 1rem; }
+.saved-empty-text { color: #888; margin-bottom: 1.2rem; font-size: 1rem; }
+.saved-explore-btn { background: #e63946; color: #fff; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 10px; font-weight: 700; font-size: 0.95rem; display: inline-block; }
+.saved-explore-btn:hover { background: #c0392b; }
+.saved-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1.2rem; }
+.saved-card-wrapper { display: flex; flex-direction: column; }
+.saved-remove-btn { margin-top: 0.4rem; background: #fff; color: #e63946; border: 1px solid #e63946; padding: 0.45rem; border-radius: 8px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+.saved-remove-btn:hover { background: #e63946; color: #fff; }
+@media (max-width: 600px) {
+  .saved-grid { grid-template-columns: 1fr; }
+}
