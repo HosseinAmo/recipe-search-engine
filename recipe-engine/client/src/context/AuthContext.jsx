@@ -2,13 +2,23 @@
  * @file AuthContext.jsx
  * @description React context for global auth state. Provides current user,
  *              login, logout, and register functions to all child components.
+ *              Uses js-cookie to persist a client-side auth token alongside
+ *              the server-side httpOnly session cookie.
  * @author Hossein
  */
-
 import { createContext, useContext, useState, useEffect } from "react";
+import Cookies from "js-cookie";
 import api from "../utils/api";
 
 const AuthContext = createContext(null);
+
+// Cookie config
+const TOKEN_COOKIE = "auth_token";
+const COOKIE_OPTIONS = {
+  expires: 7,        // days
+  secure: true,      // HTTPS only
+  sameSite: "Strict",
+};
 
 /**
  * AuthProvider wraps the app and exposes auth state via context.
@@ -25,23 +35,36 @@ export const AuthProvider = ({ children }) => {
   // Restore session on page load by checking the JWT cookie
   useEffect(() => {
     const restoreSession = async () => {
+      // Only attempt restore if we have a client-side token cookie
+      const token = Cookies.get(TOKEN_COOKIE);
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
       try {
         const res = await api.get("/auth/profile");
         if (res.data.success) {
           setUser(res.data.user);
+        } else {
+          // Server rejected the session — clear the stale cookie
+          Cookies.remove(TOKEN_COOKIE);
         }
       } catch {
-        // No valid session - user stays null
+        // No valid session - clear cookie and leave user as null
+        Cookies.remove(TOKEN_COOKIE);
         setUser(null);
       } finally {
         setLoading(false);
       }
     };
+
     restoreSession();
   }, []);
 
   /**
    * Log in with email and password.
+   * Persists the returned token in a client-side cookie.
    * @param {string} email
    * @param {string} password
    * @returns {object} API response data
@@ -50,12 +73,17 @@ export const AuthProvider = ({ children }) => {
     const res = await api.post("/auth/login", { email, password });
     if (res.data.success) {
       setUser(res.data.user);
+      // Store the token returned by the server in a cookie
+      if (res.data.token) {
+        Cookies.set(TOKEN_COOKIE, res.data.token, COOKIE_OPTIONS);
+      }
     }
     return res.data;
   };
 
   /**
    * Register a new account.
+   * Persists the returned token in a client-side cookie.
    * @param {string} name
    * @param {string} email
    * @param {string} password
@@ -65,15 +93,19 @@ export const AuthProvider = ({ children }) => {
     const res = await api.post("/auth/register", { name, email, password });
     if (res.data.success) {
       setUser(res.data.user);
+      if (res.data.token) {
+        Cookies.set(TOKEN_COOKIE, res.data.token, COOKIE_OPTIONS);
+      }
     }
     return res.data;
   };
 
   /**
-   * Log the current user out and clear state.
+   * Log the current user out, clear state, and remove the auth cookie.
    */
   const logout = async () => {
     await api.post("/auth/logout");
+    Cookies.remove(TOKEN_COOKIE);
     setUser(null);
   };
 
