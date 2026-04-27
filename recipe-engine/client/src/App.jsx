@@ -11,6 +11,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
+import CookieConsent from "./components/CookieConsent";
+
 
 // Pages - Hossein leads
 import HomePage from "./pages/HomePage";
@@ -58,6 +60,7 @@ function App() {
             />
           </Routes>
         </main>
+        <CookieConsent />
       </Router>
     </AuthProvider>
   );
