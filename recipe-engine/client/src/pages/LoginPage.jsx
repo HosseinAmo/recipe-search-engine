@@ -6,7 +6,7 @@
  */
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./AuthPage.css";
 
@@ -17,6 +17,9 @@ import "./AuthPage.css";
 const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const sessionExpired = params.get("expired") === "true";
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
@@ -72,6 +75,11 @@ const LoginPage = () => {
     <div className="auth-page">
       <div className="auth-card">
         <h1 className="auth-title">Log In</h1>
+        {sessionExpired && (
+          <p className="auth-warning">
+            Your session expired due to inactivity. Please log in again.
+          </p>  
+        )}
 
         <div className="auth-field">
           <label htmlFor="email">Email</label>

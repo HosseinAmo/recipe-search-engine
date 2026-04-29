@@ -26,7 +26,7 @@ const protect = async (req, res, next) => {
   }
   try {
     // Attach the user document to the request (excluding password)
-    const user = await User.findById(req.session.userId).select("-password");
+    const user = await User.findById(req.session.userId).select("-passwordHash");
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -56,7 +56,7 @@ const protect = async (req, res, next) => {
 const optionalAuth = async (req, res, next) => {
   if (!req.session || !req.session.userId) return next();
   try {
-    const user = await User.findById(req.session.userId).select("-password");
+    const user = await User.findById(req.session.userId).select("-passwordHash");
     if (user) req.user = user;
   } catch {
     // Invalid session — continue without user

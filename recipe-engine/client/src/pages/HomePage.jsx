@@ -34,7 +34,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchTrending = async () => {
       try {
-        const res = await api.get("/recipes?limit=4&sort=rating");
+        const res = await api.get("/recipes?limit=12&sort=rating");
         if (res.data.success) setTrending(res.data.recipes);
       } catch (err) {
         console.error("Trending fetch error:", err);
@@ -109,7 +109,7 @@ const HomePage = () => {
   /* NEW: Navigate to a random recipe */
   const handleSurpriseMe = async () => {
     try {
-      const res = await api.get("/recipes?limit=50");
+      const res = await api.get("/recipes?limit=200");
       if (res.data.success && res.data.recipes.length > 0) {
         const random = res.data.recipes[Math.floor(Math.random() * res.data.recipes.length)];
         navigate(`/recipes/${random._id}`);

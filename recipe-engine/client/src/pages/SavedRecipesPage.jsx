@@ -29,7 +29,7 @@ const SavedRecipesPage = () => {
     const fetchSaved = async () => {
       try {
         const res = await api.get("/users/saved");
-        if (res.data.success) setSaved(res.data.savedRecipes || []);
+        if (res.data.success) setSaved(res.data.recipes || []);
       } catch (err) {
         console.error("Saved recipes fetch error:", err);
         setError("Failed to load saved recipes. Please try again.");

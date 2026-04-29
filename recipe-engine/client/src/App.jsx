@@ -12,6 +12,8 @@ import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 import CookieConsent from "./components/CookieConsent";
+import AdminRoute from "./components/AdminRoute";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
 
 
 // Pages - Hossein leads
@@ -26,6 +28,7 @@ import RegisterPage from "./pages/RegisterPage";
 // Flora leads
 import ProfilePage from "./pages/ProfilePage";
 import SavedRecipesPage from "./pages/SavedRecipesPage";
+import CookieBanner from "./components/CookieBanner";
 
 function App() {
   return (
@@ -58,9 +61,18 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminDashboardPage />
+                </AdminRoute>
+              }
+            />
           </Routes>
         </main>
         <CookieConsent />
+        <CookieBanner />
       </Router>
     </AuthProvider>
   );

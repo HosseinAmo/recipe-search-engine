@@ -50,6 +50,17 @@ const Navbar = () => {
           <>
             <span className="navbar-greeting">Hi, {user.name.split(" ")[0]}</span>
             <Link to="/saved"   className={`navbar-link ${isActive("/saved")   ? "active" : ""}`} onClick={closeMenu}>♥ Saved</Link>
+
+            {user.role === "admin" && (
+              <Link 
+                to="/admin"
+                className={`navbar-link ${isActive("/admin") ? "active" : ""}`}
+                onClick={closeMenu}
+              >
+                Admin
+              </Link>    
+            )}
+            
             <Link to="/profile" className={`navbar-link ${isActive("/profile") ? "active" : ""}`} onClick={closeMenu}>Profile</Link>
             <button className="navbar-logout" onClick={handleLogout}>Logout</button>
           </>

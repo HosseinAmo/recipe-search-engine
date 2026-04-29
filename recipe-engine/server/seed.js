@@ -10,26 +10,31 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('path');
 
-dotenv.config({ path: path.join(__dirname, '../.env') });
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const Recipe = require('../server/models/Recipe');
 
 const recipes = [
   {
-    title: 'Spaghetti Carbonara',
-    description: 'Classic Roman pasta with eggs, cheese, pancetta and black pepper.',
-    ingredients: [
-      { name: 'spaghetti', amount: 400, unit: 'g' },
-      { name: 'pancetta', amount: 200, unit: 'g' },
-      { name: 'eggs', amount: 4, unit: '' },
-      { name: 'parmesan', amount: 100, unit: 'g' },
-      { name: 'black pepper', amount: 2, unit: 'tsp' },
-      { name: 'salt', amount: 1, unit: 'tsp' },
-    ],
-    instructions: '1. Cook spaghetti in salted boiling water until al dente.\n2. Fry pancetta until crispy.\n3. Whisk eggs and parmesan together.\n4. Drain pasta, reserving 1 cup pasta water.\n5. Off heat, toss pasta with pancetta, then egg mixture, adding pasta water to loosen.\n6. Season generously with black pepper and serve immediately.',
-    cookTime: 25, servings: 4, calories: 620, dietaryTags: [],
-    averageRating: 4.8, reviewCount: 142,
-  },
+  title: 'Spaghetti Carbonara',
+  description: 'Classic Roman pasta with eggs, cheese, pancetta and black pepper.',
+  ingredients: [
+    { name: 'spaghetti', amount: 400, unit: 'g' },
+    { name: 'pancetta', amount: 200, unit: 'g' },
+    { name: 'eggs', amount: 4, unit: '' },
+    { name: 'parmesan', amount: 100, unit: 'g' },
+    { name: 'black pepper', amount: 2, unit: 'tsp' },
+    { name: 'salt', amount: 1, unit: 'tsp' },
+  ],
+  instructions: '1. Cook spaghetti in salted boiling water until al dente.\n2. Fry pancetta until crispy.\n3. Whisk eggs and parmesan together.\n4. Drain pasta, reserving 1 cup pasta water.\n5. Off heat, toss pasta with pancetta, then egg mixture, adding pasta water to loosen.\n6. Season generously with black pepper and serve immediately.',
+  cookTime: 25,
+  servings: 4,
+  calories: 620,
+  dietaryTags: [],
+  image: 'https://www.themealdb.com/images/media/meals/llcbn01574260722.jpg',
+  averageRating: 4.8,
+  reviewCount: 142,
+},
   {
     title: 'Chicken Tikka Masala',
     description: 'Tender chicken in a rich, spiced tomato and cream sauce.',
@@ -46,8 +51,7 @@ const recipes = [
       { name: 'butter', amount: 30, unit: 'g' },
     ],
     instructions: '1. Marinate chicken in yogurt, half the garlic, ginger and spices for at least 1 hour.\n2. Grill or pan-fry chicken until charred at edges. Set aside.\n3. Soften onion in butter, add remaining garlic and ginger.\n4. Add passata, simmer 15 min.\n5. Stir in cream and chicken, simmer 10 min.\n6. Serve with rice or naan.',
-    cookTime: 40, servings: 4, calories: 480, dietaryTags: ['gluten-free'],
-    averageRating: 4.7, reviewCount: 203,
+    cookTime: 40, servings: 4, calories: 480, dietaryTags: ['gluten-free'], image: 'https://www.themealdb.com/images/media/meals/uttupv1511815050.jpg', averageRating: 4.7, reviewCount: 203,
   },
   {
     title: 'Classic Beef Burger',
@@ -66,6 +70,7 @@ const recipes = [
     ],
     instructions: '1. Mix mince with salt and pepper, form into 4 patties.\n2. Cook on a hot grill or pan 4 min each side for medium.\n3. Add cheese in last minute to melt.\n4. Toast buns.\n5. Assemble with lettuce, tomato, onion and sauces.',
     cookTime: 20, servings: 4, calories: 580, dietaryTags: [],
+    image: 'https://www.themealdb.com/images/media/meals/sypxpx1515365095.jpg',
     averageRating: 4.5, reviewCount: 87,
   },
   {
@@ -84,6 +89,7 @@ const recipes = [
     ],
     instructions: '1. Mix soy sauce, sesame oil and cornstarch in a bowl.\n2. Heat wok over high heat with vegetable oil.\n3. Stir fry garlic and ginger 30 seconds.\n4. Add vegetables, stir fry 5–7 min.\n5. Pour in sauce, toss to coat.\n6. Serve immediately with rice or noodles.',
     cookTime: 15, servings: 2, calories: 220, dietaryTags: ['vegetarian', 'vegan', 'dairy-free'],
+    image: 'https://www.themealdb.com/images/media/meals/wrustq1511475474.jpg',
     averageRating: 4.3, reviewCount: 56,
   },
   {
@@ -103,6 +109,7 @@ const recipes = [
     ],
     instructions: '1. Heat stock in a separate pan.\n2. Soften onion and garlic in oil and half the butter.\n3. Add mushrooms, cook until golden.\n4. Add rice, toast 2 min.\n5. Pour in wine, stir until absorbed.\n6. Add hot stock one ladle at a time, stirring constantly.\n7. After 18 min, stir in remaining butter and parmesan.\n8. Season and serve.',
     cookTime: 35, servings: 4, calories: 430, dietaryTags: ['vegetarian', 'gluten-free'],
+    image: 'https://www.themealdb.com/images/media/meals/wyxwsp1486979827.jpg',
     averageRating: 4.6, reviewCount: 98,
   },
   {
@@ -120,6 +127,7 @@ const recipes = [
     ],
     instructions: '1. Chop tomatoes, cucumber and red onion into chunks.\n2. Combine in a large bowl.\n3. Add olives and crumbled feta.\n4. Drizzle with olive oil and sprinkle oregano.\n5. Season with salt and serve.',
     cookTime: 10, servings: 4, calories: 260, dietaryTags: ['vegetarian', 'gluten-free'],
+    image: 'https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg',
     averageRating: 4.4, reviewCount: 74,
   },
   {
@@ -137,6 +145,7 @@ const recipes = [
     ],
     instructions: '1. Season salmon with salt and pepper.\n2. Heat olive oil in pan over medium-high heat.\n3. Cook salmon skin-side up 4 min, flip and cook 3 min.\n4. Remove salmon.\n5. Add butter and garlic to pan, cook 1 min.\n6. Add lemon juice and parsley.\n7. Pour sauce over salmon and serve.',
     cookTime: 15, servings: 4, calories: 380, dietaryTags: ['gluten-free', 'dairy-free'],
+    image: 'https://www.themealdb.com/images/media/meals/1548772327.jpg',
     averageRating: 4.7, reviewCount: 119,
   },
   {
@@ -155,6 +164,7 @@ const recipes = [
     ],
     instructions: '1. Halve tomatoes, toss with olive oil and roast at 200°C for 30 min.\n2. Soften onion and garlic in a pot.\n3. Add roasted tomatoes and stock, simmer 15 min.\n4. Blend until smooth.\n5. Stir in cream and basil.\n6. Season and serve with crusty bread.',
     cookTime: 50, servings: 4, calories: 190, dietaryTags: ['vegetarian', 'gluten-free'],
+    image: 'https://www.themealdb.com/images/media/meals/stpuws1511191310.jpg',
     averageRating: 4.5, reviewCount: 61,
   },
   {
@@ -171,6 +181,7 @@ const recipes = [
     ],
     instructions: '1. Mash bananas in a bowl.\n2. Whisk in eggs and milk.\n3. Fold in flour and baking powder.\n4. Melt butter in a non-stick pan over medium heat.\n5. Pour small rounds of batter, cook 2 min per side until golden.\n6. Serve with honey.',
     cookTime: 20, servings: 2, calories: 340, dietaryTags: ['vegetarian'],
+    image: 'https://www.themealdb.com/images/media/meals/sywswr1511383814.jpg',
     averageRating: 4.3, reviewCount: 45,
   },
   {
@@ -189,6 +200,7 @@ const recipes = [
     ],
     instructions: '1. Season and grill chicken breast 6 min each side until cooked through. Slice.\n2. Make dressing: blend mayo, garlic, lemon juice, worcestershire and a little parmesan.\n3. Tear lettuce into a bowl.\n4. Add dressing and toss.\n5. Top with chicken, croutons and remaining parmesan.',
     cookTime: 25, servings: 2, calories: 450, dietaryTags: [],
+    image: 'https://placehold.co/600x400?text=Chicken+Caesar+Salad',
     averageRating: 4.4, reviewCount: 78,
   },
   {
@@ -208,6 +220,7 @@ const recipes = [
     ],
     instructions: '1. Soften onion in coconut oil, add garlic and ginger.\n2. Stir in curry powder and cook 1 min.\n3. Add lentils, tomatoes, coconut milk and stock.\n4. Simmer 20 min until lentils are soft.\n5. Stir in spinach until wilted.\n6. Serve with rice or naan.',
     cookTime: 30, servings: 4, calories: 350, dietaryTags: ['vegetarian', 'vegan', 'gluten-free', 'dairy-free'],
+    image: 'https://placehold.co/600x400?text=Vegan+Lentil+Curry',
     averageRating: 4.6, reviewCount: 134,
   },
   {
@@ -226,6 +239,7 @@ const recipes = [
     ],
     instructions: '1. Cook linguine until al dente.\n2. Melt butter in a wide pan, sauté garlic and chilli flakes 1 min.\n3. Add shrimp, cook 2 min per side.\n4. Deglaze with white wine, reduce by half.\n5. Toss in drained pasta and lemon juice.\n6. Finish with parsley and serve.',
     cookTime: 20, servings: 4, calories: 510, dietaryTags: [],
+    image: 'https://placehold.co/600x400?text=Garlic+Butter+Shrimp+Pasta',
     averageRating: 4.7, reviewCount: 91,
   },
   {
@@ -242,6 +256,7 @@ const recipes = [
     ],
     instructions: '1. Toast sourdough until golden.\n2. Mash avocado with lemon juice and salt.\n3. Poach eggs in simmering water with a splash of vinegar for 3 min.\n4. Spread avocado on toast, top with poached egg.\n5. Drizzle with olive oil and sprinkle chilli flakes.',
     cookTime: 10, servings: 2, calories: 320, dietaryTags: ['vegetarian'],
+    image: 'https://placehold.co/600x400?text=Avocado+Toast',
     averageRating: 4.2, reviewCount: 43,
   },
   {
@@ -262,6 +277,7 @@ const recipes = [
     ],
     instructions: '1. Brown mince with onion and garlic.\n2. Add cumin and chilli powder, cook 2 min.\n3. Warm tortillas in a dry pan.\n4. Fill tortillas with beef.\n5. Top with tomato, cheese, lettuce and sour cream.\n6. Squeeze lime over and serve.',
     cookTime: 20, servings: 4, calories: 490, dietaryTags: ['gluten-free'],
+    image: 'https://placehold.co/600x400?text=Beef+Tacos',
     averageRating: 4.5, reviewCount: 67,
   },
   {
@@ -278,6 +294,7 @@ const recipes = [
     ],
     instructions: '1. Melt chocolate and butter together.\n2. Whisk eggs and sugar until pale.\n3. Fold chocolate into egg mixture.\n4. Fold in flour.\n5. Pour into greased ramekins.\n6. Bake at 200°C for 10–12 min — edges set, centre still wobbly.\n7. Turn out immediately and serve with ice cream.',
     cookTime: 20, servings: 4, calories: 420, dietaryTags: ['vegetarian'],
+    image: 'https://www.themealdb.com/images/media/meals/tqtywx1468317395.jpg',
     averageRating: 4.9, reviewCount: 201,
   },
   {
@@ -297,6 +314,7 @@ const recipes = [
     ],
     instructions: '1. Soften onion, garlic and pepper in olive oil.\n2. Add spices, cook 1 min.\n3. Add tomatoes, simmer 10 min until thickened.\n4. Make wells in sauce, crack in eggs.\n5. Cover and cook 5–8 min until whites are set.\n6. Crumble feta over and serve with bread.',
     cookTime: 25, servings: 2, calories: 290, dietaryTags: ['vegetarian', 'gluten-free'],
+    image: 'https://placehold.co/600x400?text=Shakshuka',
     averageRating: 4.6, reviewCount: 88,
   },
   {
@@ -313,6 +331,7 @@ const recipes = [
     ],
     instructions: '1. Mix honey, soy, garlic, ginger and sesame oil.\n2. Toss wings in marinade, rest 30 min.\n3. Bake at 220°C for 35 min, turning halfway.\n4. Brush with remaining marinade in last 5 min.\n5. Sprinkle sesame seeds and serve.',
     cookTime: 45, servings: 4, calories: 540, dietaryTags: ['dairy-free'],
+    image: 'https://placehold.co/600x400?text=Honey+Garlic+Chicken+Wings',
     averageRating: 4.7, reviewCount: 156,
   },
   {
@@ -329,6 +348,7 @@ const recipes = [
     ],
     instructions: '1. Soften onion in butter.\n2. Add peas and stock, bring to boil.\n3. Simmer 5 min.\n4. Add mint and blend until smooth.\n5. Stir in cream, season and serve.',
     cookTime: 15, servings: 4, calories: 180, dietaryTags: ['vegetarian', 'gluten-free'],
+    image: 'https://placehold.co/600x400?text=Pea+and+Mint+Soup',
     averageRating: 4.3, reviewCount: 37,
   },
   {
@@ -347,6 +367,7 @@ const recipes = [
     ],
     instructions: '1. Heat wok until smoking, add oil.\n2. Stir fry prawns 2 min, remove.\n3. Scramble eggs in same wok, push to side.\n4. Add rice, break up clumps.\n5. Add garlic, peas and soy sauce, toss everything.\n6. Return prawns, finish with sesame oil and spring onion.',
     cookTime: 15, servings: 2, calories: 460, dietaryTags: ['dairy-free'],
+    image: 'https://placehold.co/600x400?text=Prawn+Fried+Rice',
     averageRating: 4.5, reviewCount: 72,
   },
   {
@@ -363,6 +384,7 @@ const recipes = [
     ],
     instructions: '1. Slice mozzarella and tomatoes to same thickness.\n2. Alternate slices on a plate.\n3. Tuck basil leaves between slices.\n4. Drizzle with olive oil and balsamic glaze.\n5. Season and serve.',
     cookTime: 5, servings: 4, calories: 240, dietaryTags: ['vegetarian', 'gluten-free'],
+    image: 'https://placehold.co/600x400?text=Caprese+Salad',
     averageRating: 4.4, reviewCount: 53,
   },
   {
@@ -381,6 +403,7 @@ const recipes = [
     ],
     instructions: '1. Slowly caramelise onions in butter with sugar — 40 min over low heat.\n2. Add wine, reduce by half.\n3. Add stock, thyme and bay leaf, simmer 20 min.\n4. Ladle into oven-safe bowls.\n5. Float a baguette slice on top, pile with gruyère.\n6. Grill until bubbling and golden.',
     cookTime: 75, servings: 4, calories: 380, dietaryTags: [],
+    image: 'https://placehold.co/600x400?text=French+Onion+Soup',
     averageRating: 4.8, reviewCount: 112,
   },
   {
@@ -401,6 +424,7 @@ const recipes = [
     ],
     instructions: '1. Soak noodles in warm water 20 min.\n2. Mix tamarind, fish sauce and sugar into sauce.\n3. Fry tofu until golden, push to side.\n4. Scramble eggs.\n5. Add drained noodles and sauce, toss 3 min.\n6. Add bean sprouts and spring onion.\n7. Serve topped with peanuts and lime.',
     cookTime: 30, servings: 2, calories: 520, dietaryTags: ['vegetarian', 'dairy-free'],
+    image: 'https://placehold.co/600x400?text=Pad+Thai',
     averageRating: 4.5, reviewCount: 83,
   },
   {
@@ -417,6 +441,7 @@ const recipes = [
     ],
     instructions: '1. Preheat oven to 250°C with a pizza stone or heavy baking tray.\n2. Stretch dough into a round.\n3. Mix passata with garlic and salt, spread on dough.\n4. Tear mozzarella over the top.\n5. Bake 8–10 min until crust is charred at edges.\n6. Top with fresh basil and a drizzle of oil.',
     cookTime: 20, servings: 2, calories: 560, dietaryTags: ['vegetarian'],
+    image: 'https://placehold.co/600x400?text=Margherita+Pizza',
     averageRating: 4.6, reviewCount: 167,
   },
   {
@@ -435,6 +460,7 @@ const recipes = [
     ],
     instructions: '1. Preheat oven to 200°C.\n2. Rub chicken all over with softened butter, salt and pepper.\n3. Stuff cavity with lemon halves, garlic and herbs.\n4. Roast 80 min, basting every 20 min.\n5. Rest 15 min before carving.',
     cookTime: 100, servings: 4, calories: 520, dietaryTags: ['gluten-free'],
+    image: 'https://placehold.co/600x400?text=Roast+Chicken',
     averageRating: 4.7, reviewCount: 94,
   },
   {
@@ -452,6 +478,7 @@ const recipes = [
     ],
     instructions: '1. Blend frozen mango, banana and coconut milk until thick and smooth.\n2. Pour into a bowl.\n3. Top with granola, sliced kiwi, blueberries.\n4. Drizzle with honey and sprinkle chia seeds.',
     cookTime: 5, servings: 1, calories: 380, dietaryTags: ['vegetarian', 'vegan', 'dairy-free'],
+    image: 'https://placehold.co/600x400?text=Mango+Smoothie+Bowl',
     averageRating: 4.3, reviewCount: 29,
   },
   {
@@ -470,6 +497,7 @@ const recipes = [
     ],
     instructions: '1. Mix lamb mince with grated onion, garlic and spices.\n2. Shape around skewers into sausages.\n3. Grill or barbecue 10–12 min, turning occasionally.\n4. Warm pittas.\n5. Serve kebabs in pittas with tzatziki and salad.',
     cookTime: 25, servings: 4, calories: 490, dietaryTags: [],
+    image: 'https://placehold.co/600x400?text=Lamb+Kebabs',
     averageRating: 4.6, reviewCount: 58,
   },
   {
@@ -487,6 +515,7 @@ const recipes = [
     ],
     instructions: '1. Cube squash, toss with oil and roast at 200°C for 30 min.\n2. Soften onion and garlic in a pot.\n3. Add roasted squash and stock, simmer 10 min.\n4. Add coconut milk and nutmeg, blend until smooth.\n5. Season and serve.',
     cookTime: 50, servings: 4, calories: 210, dietaryTags: ['vegetarian', 'vegan', 'gluten-free', 'dairy-free'],
+    image: 'https://placehold.co/600x400?text=Butternut+Squash+Soup',
     averageRating: 4.5, reviewCount: 71,
   },
   {
@@ -504,6 +533,7 @@ const recipes = [
     ],
     instructions: '1. Cut potatoes into thick chips, par-boil 5 min, drain and dry.\n2. Make batter: whisk flour, baking powder and beer until smooth.\n3. Heat oil to 180°C.\n4. Fry chips 5 min until golden, drain and keep warm.\n5. Dip fish in batter and fry 4–5 min until crispy.\n6. Serve with chips, salt and vinegar.',
     cookTime: 40, servings: 4, calories: 680, dietaryTags: [],
+    image: 'https://placehold.co/600x400?text=Fish+and+Chips',
     averageRating: 4.6, reviewCount: 102,
   },
   {
@@ -519,6 +549,7 @@ const recipes = [
     ],
     instructions: '1. Bring milk to a simmer with oats and salt.\n2. Cook 5 min, stirring regularly.\n3. Add cinnamon.\n4. Serve topped with berries and maple syrup.',
     cookTime: 10, servings: 1, calories: 350, dietaryTags: ['vegetarian'],
+    image: 'https://placehold.co/600x400?text=Oatmeal+with+Berries',
     averageRating: 4.2, reviewCount: 38,
   },
   {
@@ -536,6 +567,7 @@ const recipes = [
     ],
     instructions: '1. Drain and mash black beans with cumin and garlic powder.\n2. Spread bean mixture on half of each tortilla.\n3. Top with cheese, fold over.\n4. Cook in a buttered pan 2–3 min per side until crispy and golden.\n5. Serve with salsa and sour cream.',
     cookTime: 15, servings: 4, calories: 410, dietaryTags: ['vegetarian'],
+    image: 'https://placehold.co/600x400?text=Black+Bean+Quesadillas',
     averageRating: 4.3, reviewCount: 44,
   },
   {
@@ -553,6 +585,7 @@ const recipes = [
     ],
     instructions: '1. Combine soy sauce, honey, mirin, garlic and ginger for teriyaki sauce.\n2. Marinate salmon 15 min.\n3. Pan-fry salmon 3–4 min per side.\n4. Pour remaining marinade in pan, simmer 1 min to glaze.\n5. Serve over rice, sprinkle sesame seeds and spring onion.',
     cookTime: 20, servings: 4, calories: 360, dietaryTags: ['dairy-free'],
+    image: 'https://placehold.co/600x400?text=Teriyaki+Salmon',
     averageRating: 4.7, reviewCount: 88,
   },
   {
@@ -570,6 +603,7 @@ const recipes = [
     ],
     instructions: '1. Cut tops off peppers and remove seeds.\n2. Soften onion and garlic in oil, add tomatoes and paprika.\n3. Stir in cooked rice.\n4. Fill peppers with rice mixture.\n5. Top with mozzarella.\n6. Bake at 180°C for 25 min until peppers are tender.',
     cookTime: 35, servings: 4, calories: 310, dietaryTags: ['vegetarian', 'gluten-free'],
+    image: 'https://placehold.co/600x400?text=Stuffed+Bell+Peppers',
     averageRating: 4.3, reviewCount: 51,
   },
   {
@@ -589,6 +623,7 @@ const recipes = [
     ],
     instructions: '1. Fry curry paste in oil until fragrant.\n2. Add half the coconut milk, simmer 5 min.\n3. Add chicken, cook 10 min.\n4. Add remaining coconut milk, fish sauce and sugar.\n5. Add courgette and green beans, cook 5 min.\n6. Finish with basil and lime juice.',
     cookTime: 30, servings: 4, calories: 420, dietaryTags: ['gluten-free', 'dairy-free'],
+    image: 'https://placehold.co/600x400?text=Thai+Green+Curry',
     averageRating: 4.6, reviewCount: 113,
   },
   {
@@ -606,6 +641,7 @@ const recipes = [
     ],
     instructions: '1. Drain chickpeas, reserve liquid.\n2. Blend chickpeas, tahini, lemon juice, garlic and cumin.\n3. Add reserved liquid gradually until smooth.\n4. Season generously.\n5. Serve drizzled with olive oil and paprika.',
     cookTime: 10, servings: 6, calories: 180, dietaryTags: ['vegetarian', 'vegan', 'gluten-free', 'dairy-free'],
+    image: 'https://placehold.co/600x400?text=Homemade+Hummus',
     averageRating: 4.5, reviewCount: 67,
   },
   {
@@ -625,6 +661,7 @@ const recipes = [
     ],
     instructions: '1. Toss beef in flour, season.\n2. Brown in oil in batches, set aside.\n3. Soften onion and garlic.\n4. Add tomato paste, cook 1 min.\n5. Return beef, add stock, thyme, carrots and potatoes.\n6. Cover and simmer 90 min until beef is tender.',
     cookTime: 110, servings: 6, calories: 480, dietaryTags: ['dairy-free'],
+    image: 'https://placehold.co/600x400?text=Beef+Stew',
     averageRating: 4.7, reviewCount: 123,
   },
   {
@@ -642,6 +679,7 @@ const recipes = [
     ],
     instructions: '1. Melt butter, mix with sugar, eggs, milk and vanilla.\n2. Fold in flour and baking powder until just combined.\n3. Fold in blueberries.\n4. Fill 12 muffin cases.\n5. Sprinkle with sugar.\n6. Bake at 190°C for 20–22 min.',
     cookTime: 30, servings: 12, calories: 220, dietaryTags: ['vegetarian'],
+    image: 'https://placehold.co/600x400?text=Blueberry+Muffins',
     averageRating: 4.6, reviewCount: 89,
   },
   {
@@ -660,6 +698,7 @@ const recipes = [
     ],
     instructions: '1. Toss prawns with chilli powder, garlic powder, oil and lime juice.\n2. Cook prawns in a hot pan 2 min per side.\n3. Dice mango, red onion and coriander for salsa, season with lime.\n4. Warm tortillas.\n5. Fill with prawns and mango salsa.',
     cookTime: 15, servings: 4, calories: 320, dietaryTags: ['gluten-free', 'dairy-free'],
+    image: 'https://placehold.co/600x400?text=Prawn+Tacos+with+Mango+Salsa',
     averageRating: 4.6, reviewCount: 76,
   },
   {
@@ -678,6 +717,7 @@ const recipes = [
     ],
     instructions: '1. Soften onion, pepper and courgette in ovenproof pan.\n2. Add halved cherry tomatoes.\n3. Whisk eggs with salt and pour over vegetables.\n4. Crumble feta on top.\n5. Cook on hob 3 min until edges set.\n6. Transfer to 180°C oven for 12 min until set.',
     cookTime: 25, servings: 4, calories: 270, dietaryTags: ['vegetarian', 'gluten-free'],
+    image: 'https://placehold.co/600x400?text=Vegetable+Frittata',
     averageRating: 4.4, reviewCount: 49,
   },
   {
@@ -695,6 +735,7 @@ const recipes = [
     ],
     instructions: '1. Toast pine nuts until golden.\n2. Blend basil, parmesan, pine nuts, garlic and olive oil until smooth.\n3. Season with salt and lemon.\n4. Cook pasta until al dente.\n5. Toss with pesto, adding pasta water to loosen.',
     cookTime: 20, servings: 4, calories: 540, dietaryTags: ['vegetarian'],
+    image: 'https://placehold.co/600x400?text=Pesto+Pasta',
     averageRating: 4.5, reviewCount: 92,
   },
   {
@@ -713,6 +754,7 @@ const recipes = [
     ],
     instructions: '1. Simmer chicken breast in stock with thyme 20 min.\n2. Remove chicken, shred and set aside.\n3. Soften carrot, celery, onion and garlic in the stock.\n4. Add egg noodles, cook 5 min.\n5. Return shredded chicken.\n6. Finish with parsley and serve.',
     cookTime: 35, servings: 4, calories: 320, dietaryTags: ['dairy-free'],
+    image: 'https://placehold.co/600x400?text=Chicken+Noodle+Soup',
     averageRating: 4.6, reviewCount: 104,
   },
   {
@@ -733,6 +775,7 @@ const recipes = [
     ],
     instructions: '1. Blend chickpeas, onion, garlic and spices until chunky.\n2. Add flour and form into balls, flatten slightly.\n3. Pan-fry in oil 3 min per side until golden and crisp.\n4. Warm flatbreads.\n5. Spread hummus, add falafel, salad and tomato.\n6. Drizzle with tahini and roll up.',
     cookTime: 25, servings: 4, calories: 390, dietaryTags: ['vegetarian', 'vegan', 'dairy-free'],
+    image: 'https://placehold.co/600x400?text=Falafel+Wrap',
     averageRating: 4.4, reviewCount: 62,
   },
   {
@@ -747,6 +790,7 @@ const recipes = [
     ],
     instructions: '1. Mix softened butter with crushed garlic, parsley and salt.\n2. Slice baguette diagonally without cutting all the way through.\n3. Spread butter generously in each cut.\n4. Wrap in foil, bake at 200°C for 15 min.\n5. Open foil, bake 5 more min until crispy.',
     cookTime: 20, servings: 4, calories: 290, dietaryTags: ['vegetarian'],
+    image: 'https://placehold.co/600x400?text=Garlic+Bread',
     averageRating: 4.3, reviewCount: 41,
   },
   {
@@ -765,6 +809,7 @@ const recipes = [
     ],
     instructions: '1. Cook macaroni until al dente.\n2. Make béchamel: melt butter, whisk in flour, gradually add milk.\n3. Add mustard and nutmeg, simmer until thick.\n4. Stir in most of the cheese.\n5. Combine with pasta, pour into baking dish.\n6. Top with remaining cheese and breadcrumbs.\n7. Bake at 190°C for 25 min until golden.',
     cookTime: 45, servings: 6, calories: 550, dietaryTags: ['vegetarian'],
+    image: 'https://placehold.co/600x400?text=Baked+Mac+and+Cheese',
     averageRating: 4.7, reviewCount: 138,
   },
   {
@@ -784,6 +829,7 @@ const recipes = [
     ],
     instructions: '1. Hard boil eggs 8 min, cool and halve.\n2. Blanch green beans 3 min.\n3. Sear tuna 1–2 min per side, slice.\n4. Make dressing: whisk oil, mustard and vinegar.\n5. Arrange all ingredients on plates.\n6. Drizzle dressing and serve.',
     cookTime: 20, servings: 2, calories: 430, dietaryTags: ['gluten-free', 'dairy-free'],
+    image: 'https://placehold.co/600x400?text=Tuna+Nicoise+Salad',
     averageRating: 4.4, reviewCount: 55,
   },
   {
@@ -804,6 +850,7 @@ const recipes = [
     ],
     instructions: '1. Whisk eggs, oil and sugar.\n2. Fold in flour, baking powder and cinnamon.\n3. Stir in grated carrot and chopped walnuts.\n4. Bake in two 20cm tins at 175°C for 30 min.\n5. Beat cream cheese, butter and icing sugar for frosting.\n6. Layer and frost when cool.',
     cookTime: 50, servings: 12, calories: 390, dietaryTags: ['vegetarian'],
+    image: 'https://placehold.co/600x400?text=Carrot+Cake',
     averageRating: 4.8, reviewCount: 177,
   },
   {
@@ -822,6 +869,7 @@ const recipes = [
     ],
     instructions: '1. Press tofu dry, cube and fry in oil until crispy all over.\n2. Mix gochujang, soy sauce, sesame oil and garlic.\n3. Toss tofu in sauce, cook 2 min.\n4. Serve over rice with edamame.\n5. Top with spring onion and sesame seeds.',
     cookTime: 20, servings: 2, calories: 430, dietaryTags: ['vegetarian', 'vegan', 'dairy-free'],
+    image: 'https://placehold.co/600x400?text=Spicy+Tofu+Bowl',
     averageRating: 4.5, reviewCount: 61,
   },
   {
@@ -839,6 +887,7 @@ const recipes = [
     ],
     instructions: '1. Roast potato chunks with oil and rosemary at 200°C for 35 min.\n2. Make mint sauce: chop mint, mix with vinegar, sugar and 2 tbsp water.\n3. Rub lamb with garlic and oil, season.\n4. Grill chops 3–4 min per side for medium-rare.\n5. Rest 5 min, serve with potatoes and mint sauce.',
     cookTime: 45, servings: 4, calories: 560, dietaryTags: ['gluten-free', 'dairy-free'],
+    image: 'https://placehold.co/600x400?text=Lamb+Chops+with+Mint+Sauce',
     averageRating: 4.6, reviewCount: 79,
   },
   {
@@ -856,6 +905,7 @@ const recipes = [
     ],
     instructions: '1. Soften leeks and onion in butter over low heat.\n2. Add cubed potatoes and stock.\n3. Simmer 20 min until potato is tender.\n4. Blend until smooth.\n5. Stir in cream, season and serve.',
     cookTime: 35, servings: 4, calories: 240, dietaryTags: ['vegetarian', 'gluten-free'],
+    image: 'https://placehold.co/600x400?text=Leek+and+Potato+Soup',
     averageRating: 4.5, reviewCount: 86,
   },
   {
@@ -872,6 +922,7 @@ const recipes = [
     ],
     instructions: '1. Halve and toast bagels.\n2. Spread generously with cream cheese.\n3. Layer smoked salmon on top.\n4. Add capers and thinly sliced red onion.\n5. Squeeze lemon over.\n6. Garnish with fresh dill and serve.',
     cookTime: 5, servings: 4, calories: 380, dietaryTags: [],
+    image: 'https://placehold.co/600x400?text=Smoked+Salmon+Bagels',
     averageRating: 4.5, reviewCount: 58,
   },
   {
@@ -891,6 +942,7 @@ const recipes = [
     ],
     instructions: '1. Brown beef mince, drain excess fat.\n2. Soften onion and garlic.\n3. Add spices and tomato paste, cook 2 min.\n4. Add tomatoes, stock and beans.\n5. Simmer 45 min.\n6. Stir in dark chocolate at the end.\n7. Serve with rice or jacket potato.',
     cookTime: 60, servings: 4, calories: 470, dietaryTags: ['gluten-free', 'dairy-free'],
+    image: 'https://placehold.co/600x400?text=Chilli+Con+Carne',
     averageRating: 4.7, reviewCount: 141,
   },
 ];
