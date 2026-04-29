@@ -58,6 +58,7 @@ const SavedRecipesPage = () => {
 
   return (
     <div className="saved-page">
+      <Link to="/" className="saved-back-link">← Back to search</Link>
       <div className="saved-header">
         <h1 className="saved-title">♥ Saved Recipes</h1>
         <p className="saved-count">

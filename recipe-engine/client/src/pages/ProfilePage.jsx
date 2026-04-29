@@ -57,6 +57,7 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-page">
+      <Link to="/" className="profile-back-link">← Back to search</Link>
       {/* Avatar + name */}
       <div className="profile-hero">
         <div className="profile-avatar">{avatarLetter}</div>
@@ -64,9 +65,11 @@ const ProfilePage = () => {
           <h1 className="profile-name">{user?.name}</h1>
           <p className="profile-email">{user?.email}</p>
           {/* NEW: Role badge */}
-          <span className={`profile-role-badge ${user?.role === "admin" ? "admin" : "user"}`}>
-            {user?.role === "admin" ? "👑 Admin" : "👤 User"}
-          </span>
+          {user?.role === "admin" && (
+  <span className="profile-role-badge admin">
+    👑 Admin
+  </span>
+)}
         </div>
       </div>
 
@@ -89,10 +92,12 @@ const ProfilePage = () => {
           <span className="profile-field-label">Email</span>
           <span className="profile-field-value">{user?.email}</span>
         </div>
-        <div className="profile-field">
-          <span className="profile-field-label">Role</span>
-          <span className="profile-field-value">{user?.role}</span>
-        </div>
+        {user?.role === "admin" && (
+          <div className="profile-field">
+            <span className="profile-field-label">Role</span>
+            <span className="profile-field-value">{user?.role}</span>
+          </div>
+        )}
       </div>
 
       <div className="profile-card">

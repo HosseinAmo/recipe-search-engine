@@ -135,7 +135,9 @@ const RecipeDetailPage = () => {
           <ul className="detail-ingredients">
             {recipe.ingredients.map((ing, i) => (
               <li key={i}>
-                {ing.amount} {ing.unit} {ing.name}
+                {ing.amount && ing.amount !== 1 ? `${ing.amount} ` : ""}
+                {ing.unit ? `${ing.unit} ` : ""}
+                {ing.name}
               </li>
             ))}
           </ul>
