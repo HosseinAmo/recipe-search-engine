@@ -18,7 +18,21 @@ async function register(req, res) {
     req.session.userEmail = user.email;
     req.session.role      = user.role;
 
-    return res.status(201).json({ success: true, user });
+    req.session.save((err) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Session save failed",
+        });
+      }
+
+      return res.status(201).json({ 
+        success: true, 
+        user 
+      });
+    });
+
+    
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message });
   }
@@ -42,9 +56,19 @@ async function login(req, res) {
     req.session.userId    = user._id;
     req.session.userName  = user.name;
     req.session.userEmail = user.email;
-    req.session.role      = user.role; 
+    req.session.role      = user.role;
 
-    return res.json({ success: true, user });
+    req.session.save((err) => {
+      if (err) {
+        return res.status(500).json({
+          success: false,
+          message: "Session save failed",
+        });
+      }
+
+      return res.json({ success: true, user });
+    });
+
   } catch (err) {
     return res.status(500).json({ success: false, message: err.message });
   }
