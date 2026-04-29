@@ -44,6 +44,8 @@ app.use(
 // Session Configuration
 // rolling: true resets the session timer whenever the user makes a request.
 // Session expires after 3 hours of inactivity.
+app.set("trust proxy", 1);
+
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "dev-session-secret",
@@ -58,7 +60,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 3 * 60 * 60 * 1000, // 3 hours in milliseconds
     },
   })
