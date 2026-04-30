@@ -12,7 +12,6 @@ async function register(req, res) {
 
     const user = await User.create({ name, email, passwordHash: password });
 
-    // Start session
     req.session.userId    = user._id;
     req.session.userName  = user.name;
     req.session.userEmail = user.email;
@@ -20,21 +19,15 @@ async function register(req, res) {
 
     req.session.save((err) => {
       if (err) {
-        return res.status(500).json({
-          success: false,
-          message: "Session save failed",
-        });
+        return res.status(500).json({ success: false, message: "Session save failed" });
       }
-
-      return res.status(201).json({ 
-        success: true, 
-        user 
-      });
+      return res.status(201).json({ success: true, user });
     });
 
-    
   } catch (err) {
-    return res.status(500).json({ success: false, message: err.message });
+    if (!res.headersSent) {
+      return res.status(500).json({ success: false, message: err.message });
+    }
   }
 }
 
