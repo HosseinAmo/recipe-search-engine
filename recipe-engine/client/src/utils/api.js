@@ -16,14 +16,21 @@ const api = axios.create({
   },
 });
 
-// 👇 ADD THIS PART
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     const isAuthCheck = error.config?.url?.includes("/auth/profile");
     const isAlreadyOnLogin = window.location.pathname === "/login";
+    const isPublicRoute = ["/", "/search", "/recipes"].some((p) =>
+      window.location.pathname.startsWith(p)
+    );
 
-    if (error.response?.status === 401 && !isAuthCheck && !isAlreadyOnLogin) {
+    if (
+      error.response?.status === 401 &&
+      !isAuthCheck &&
+      !isAlreadyOnLogin &&
+      !isPublicRoute
+    ) {
       window.location.href = "/login?expired=true";
     }
     return Promise.reject(error);
