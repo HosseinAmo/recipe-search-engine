@@ -8,8 +8,7 @@ A full-stack recipe search engine built on the MERN stack. Users enter ingredien
 
 ## Live URL
 
-[https://recipe-search-engine-1.onrender.com](https://recipe-search-engine-1.onrender.com)
-
+https://recipe-search-engine-1-rxp2.onrender.com
 > Note: Render free tier spins down after inactivity — allow up to 30 seconds on first load.
 
 > ## Video demo
