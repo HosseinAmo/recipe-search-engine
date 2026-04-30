@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { protect } = require('../middleware/authMiddleware');
 const { getSaved, saveRecipe, unsaveRecipe, getMyReviews } = require('../controllers/userController');
 
-router.use(requireAuth);               // All user routes require login
+router.use(protect);              // All user routes require login
 
 router.get('/saved',             getSaved);
 router.get('/reviews',           getMyReviews);
