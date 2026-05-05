@@ -28,7 +28,7 @@ import RegisterPage from "./pages/RegisterPage";
 // Flora leads
 import ProfilePage from "./pages/ProfilePage";
 import SavedRecipesPage from "./pages/SavedRecipesPage";
-import CookieBanner from "./components/CookieBanner";
+
 
 function App() {
   return (
@@ -72,7 +72,7 @@ function App() {
           </Routes>
         </main>
         <CookieConsent />
-        <CookieBanner />
+ 
       </Router>
     </AuthProvider>
   );
